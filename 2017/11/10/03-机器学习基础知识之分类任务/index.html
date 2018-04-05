@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="你好, 欢迎来到曹越的快乐小站" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="关键词 分类任务 Classification Task 对数几率回归 logistic regression  分类任务 Classification Task             二分类与多分类   1、模型结构 Model Architecture输入$x$ 当 $P_{w,b}(C_1|x)&amp;gt;0.5$ 即$z&amp;gt;0$输出 $C_1$ 当 $P_{w,b}(C_1|x) \le">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习心得03| 机器学习基础之分类任务classification task">
+<meta property="og:url" content="http://yoursite.com/2017/11/10/03-机器学习基础知识之分类任务/index.html">
+<meta property="og:site_name" content="曹越的快乐小站">
+<meta property="og:description" content="关键词 分类任务 Classification Task 对数几率回归 logistic regression  分类任务 Classification Task             二分类与多分类   1、模型结构 Model Architecture输入$x$ 当 $P_{w,b}(C_1|x)&amp;gt;0.5$ 即$z&amp;gt;0$输出 $C_1$ 当 $P_{w,b}(C_1|x) \le">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2017/11/10/03-机器学习基础知识之分类任务/02-机器学习基础知识/02%20分类问题.png">
+<meta property="og:image" content="http://ota4w56o8.bkt.clouddn.com/%E5%8F%8C%E5%BC%AF%E6%9B%B2%E5%87%BD%E6%95%B0_.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/10/03-机器学习基础知识之分类任务/02-机器学习基础知识/03%20手写识别分类.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/10/03-机器学习基础知识之分类任务/02-机器学习基础知识/04%20语义分析.png">
+<meta property="og:updated_time" content="2018-02-07T05:35:39.459Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度学习心得03| 机器学习基础之分类任务classification task">
+<meta name="twitter:description" content="关键词 分类任务 Classification Task 对数几率回归 logistic regression  分类任务 Classification Task             二分类与多分类   1、模型结构 Model Architecture输入$x$ 当 $P_{w,b}(C_1|x)&amp;gt;0.5$ 即$z&amp;gt;0$输出 $C_1$ 当 $P_{w,b}(C_1|x) \le">
+<meta name="twitter:image" content="http://yoursite.com/2017/11/10/03-机器学习基础知识之分类任务/02-机器学习基础知识/02%20分类问题.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/10/03-机器学习基础知识之分类任务/"/>
+
+
+
+
+
+  <title>深度学习心得03| 机器学习基础之分类任务classification task | 曹越的快乐小站</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曹越的快乐小站</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">关于理想我从来没选择放弃，即使在灰头土脸的日子里。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/10/03-机器学习基础知识之分类任务/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曹越">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曹越的快乐小站">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深度学习心得03| 机器学习基础之分类任务classification task</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-10T10:47:44+08:00">
+                2017-11-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/深度学习/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/11/10/03-机器学习基础知识之分类任务/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/11/10/03-机器学习基础知识之分类任务/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/11/10/03-机器学习基础知识之分类任务/" class="leancloud_visitors" data-flag-title="深度学习心得03| 机器学习基础之分类任务classification task">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="关键词"><a href="#关键词" class="headerlink" title="关键词"></a>关键词</h1><ul>
+<li><strong>分类任务 Classification Task</strong></li>
+<li><strong>对数几率回归 logistic regression</strong></li>
+</ul>
+<h1 id="分类任务-Classification-Task"><a href="#分类任务-Classification-Task" class="headerlink" title="分类任务 Classification Task"></a>分类任务 Classification Task</h1><p align="center"><br>    <img src="./02-机器学习基础知识/02 分类问题.png" width="80%"><br>    <br>    <small> 二分类与多分类 </small><br></p>
+
+<h2 id="1、模型结构-Model-Architecture"><a href="#1、模型结构-Model-Architecture" class="headerlink" title="1、模型结构 Model Architecture"></a>1、模型结构 Model Architecture</h2><p>输入$x$</p>
+<p>当 $P_{w,b}(C_1|x)&gt;0.5$ 即$z&gt;0$输出 $C_1$</p>
+<p>当 $P_{w,b}(C_1|x) \leq 0.5$ 即$z\leq0$输出 $C_2$</p>
+<p><img src="http://ota4w56o8.bkt.clouddn.com/%E5%8F%8C%E5%BC%AF%E6%9B%B2%E5%87%BD%E6%95%B0_.png" alt="双弯曲函数图像"></p>
+<p>$P_{w,b}(C_1|x)=\sigma(z)=\frac {1}{1+ exp(-z)}$</p>
+<p>$z=w•x+b=\sum_{i}w_i x_i+b$</p>
+<p>$f_{w,b}(x)=P_{w,b}(C_1|x) $</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">线性回归</th>
+<th style="text-align:center">逻辑回归</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">第一步<br>函数</td>
+<td style="text-align:center">$f_{w,b}(x)=\sum_{i}w_i x_i+b $<br>输出任意值</td>
+<td style="text-align:center">$f_{w,b}(x)=\sigma(\sum_{i}w_i x_i+b)$<br>输出0或1</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2、损失函数-Loss-Function"><a href="#2、损失函数-Loss-Function" class="headerlink" title="2、损失函数 Loss Function"></a>2、损失函数 Loss Function</h2><p>训练集</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">$x^1$</th>
+<th style="text-align:center">$x^2$</th>
+<th style="text-align:center">$x^3$</th>
+<th style="text-align:center">……</th>
+<th style="text-align:center">$x^m$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">$C_1$</td>
+<td style="text-align:center">$C_1$</td>
+<td style="text-align:center">$C_2$</td>
+<td style="text-align:center">……</td>
+<td style="text-align:center">$C_1$</td>
+</tr>
+<tr>
+<td style="text-align:center">$\hat{y}^1=1$</td>
+<td style="text-align:center">$\hat{y}^2=1$</td>
+<td style="text-align:center">$\hat{y}^3=0$</td>
+<td style="text-align:center">……</td>
+<td style="text-align:center">$\hat{y}^m=1$</td>
+</tr>
+</tbody>
+</table>
+<p>$$<br>L(w,b)=f_{w,b}(x^1)f_{w,b}(x^2)(1-f_{w,b}(x^3))……f_{w,b}(x^m)<br>$$</p>
+<p>$$<br>w^<em>,b^</em>=arg max_{w,b}    L(w,b)<br>$$</p>
+<p>$$<br>w^<em>,b^</em>=arg min_{w,b}    -lnL(w,b)<br>$$</p>
+<p>$$<br>-lnL(w,b)=-lnf_{w,b}(x^1)-lnf_{w,b}(x^2)-ln(1-f_{w,b}(x^3))……-lnf_{w,b}(x^m)<br>$$</p>
+<p>把下式带入</p>
+<p>$$<br>lnf_{w,b}(x^i)=\hat{y}^i lnf_{w,b}(x^i) + (1- \hat{y}^i)(1-lnf_{w,b}(x^i))<br>$$</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">线性回归</th>
+<th style="text-align:center">逻辑回归</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">第二步<br>评估函数的效果</td>
+<td style="text-align:center">训练集$(x^n,\hat{y}^n)$<br>$\hat{y}$：一个实数<br>$L(f) = \frac 1 {2} \sum_{i=1}^m (f(x^{(i)})-y^{(i)})^2$</td>
+<td style="text-align:center">训练集$(x^n,\hat{y}^n)$<br>$\hat{y}$：1是class1 2是class2<br>$L(f) = \sum_{i=1}^m C(f(x^{(i)})-y^{(i)})$</td>
+</tr>
+</tbody>
+</table>
+<p>$$<br>L(f)=\sum_{n} \delta (f(x^n) \ne \hat{y}^n<br>$$</p>
+<p>对$\delta()$的理解</p>
+<p>当$f(x^n) = \hat{y}^n)$ 为0</p>
+<p>当$f(x^n) \ne \hat{y}^n)$ 为1</p>
+<p>在训练集合上对正确的结果进行累计</p>
+<h3 id="3、最优化-Optimization"><a href="#3、最优化-Optimization" class="headerlink" title="3、最优化 Optimization"></a>3、最优化 Optimization</h3><h3 id="向量表示的例子-Vector-Representation-Example"><a href="#向量表示的例子-Vector-Representation-Example" class="headerlink" title="向量表示的例子 Vector Representation Example"></a>向量表示的例子 Vector Representation Example</h3><p>$f(x)=y$ $f:R^N→R^M$ </p>
+<p>$x:$ 输入 $N$ 维向量</p>
+<p>$y:$ 输出 $M$ 维向量</p>
+<p align="center"><br>    <img src="./02-机器学习基础知识/03 手写识别分类.png" width="80%"><br>    <br>    <small> 手写识别分类 </small><br></p>
+
+<p>输入是一个像素为$26×26$的图像（矩阵），用一个$256$的向量表示</p>
+<p>输出是一个$one-hot$的向量，只有一个分量为$1$，其他分量为$0$</p>
+<p align="center"><br>    <img src="./02-机器学习基础知识/04 语义分析.png" width="80%"><br>    <br>    <small> 单个神经元 </small><br></p>
+
+<p>输入为词典为这个单词的编号</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/10/02-机器学习基础知识之线性回归/" rel="next" title="深度学习心得02| 机器学习基础之线性回归 linear regression">
+                <i class="fa fa-chevron-left"></i> 深度学习心得02| 机器学习基础之线性回归 linear regression
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/10/04-神经网络/" rel="prev" title="深度学习心得04| 神经网络 neural network">
+                深度学习心得04| 神经网络 neural network <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="曹越" />
+            
+              <p class="site-author-name" itemprop="name">曹越</p>
+              <p class="site-description motion-element" itemprop="description">曹越的小天地</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/happycaoyue" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/imupkucaoyue" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-globe"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.weibo.com/imupkucaoyue" target="_blank" title="Weibo">
+                    
+                      <i class="fa fa-fw fa-globe"></i>Weibo</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://wycheng.me" title="南大校草王雨城个人技术博客" target="_blank">南大校草王雨城个人技术博客</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://plushunter.github.io" title="人大应用统计硕士技术博客" target="_blank">人大应用统计硕士技术博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关键词"><span class="nav-number">1.</span> <span class="nav-text">关键词</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分类任务-Classification-Task"><span class="nav-number">2.</span> <span class="nav-text">分类任务 Classification Task</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、模型结构-Model-Architecture"><span class="nav-number">2.1.</span> <span class="nav-text">1、模型结构 Model Architecture</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、损失函数-Loss-Function"><span class="nav-number">2.2.</span> <span class="nav-text">2、损失函数 Loss Function</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3、最优化-Optimization"><span class="nav-number">2.2.1.</span> <span class="nav-text">3、最优化 Optimization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向量表示的例子-Vector-Representation-Example"><span class="nav-number">2.2.2.</span> <span class="nav-text">向量表示的例子 Vector Representation Example</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曹越</span>
+<span id="busuanzi_container_site_pv">
+   <i class="fa fa-eye-"></i>本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+
+  <span id="busuanzi_container_site_uv">
+   <i class="fa fa-user-"></i>本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cyt2xVwFT';
+      var conf = 'a1bffb2be42605f5a43d6531f7dbf31c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("EbaweVDHiHrQymnk5wIzfHP1-gzGzoHsz", "12DUrd2KdWPF2TdD64eMkAXl");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

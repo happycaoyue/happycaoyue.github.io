@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="你好, 欢迎来到曹越的快乐小站" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="关键词 深度学习 deep learning 机器学习 machine learning 线性回归 linear regression 线性模型 logic model 损失函数 loss funtion 梯度下降法 GD：gradient descent 欠拟合 underfitting 过拟合 overfitting 正则化 regularization  一、机器学习 1、监督学习 Supe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习心得02| 机器学习基础之线性回归 linear regression">
+<meta property="og:url" content="http://yoursite.com/2017/10/10/02-机器学习基础知识之线性回归/index.html">
+<meta property="og:site_name" content="曹越的快乐小站">
+<meta property="og:description" content="关键词 深度学习 deep learning 机器学习 machine learning 线性回归 linear regression 线性模型 logic model 损失函数 loss funtion 梯度下降法 GD：gradient descent 欠拟合 underfitting 过拟合 overfitting 正则化 regularization  一、机器学习 1、监督学习 Supe">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2017/10/10/02-机器学习基础知识之线性回归/02-机器学习基础知识/01%20Machine%20LearningFramework.png">
+<meta property="og:image" content="http://images.cnblogs.com/cnblogs_com/happycaoyue/1010855/o_0013.png">
+<meta property="og:image" content="http://images.cnblogs.com/cnblogs_com/happycaoyue/1010855/o_0014.png">
+<meta property="og:image" content="http://images.cnblogs.com/cnblogs_com/happycaoyue/1010855/o_0016.png">
+<meta property="og:updated_time" content="2018-02-07T05:35:25.661Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度学习心得02| 机器学习基础之线性回归 linear regression">
+<meta name="twitter:description" content="关键词 深度学习 deep learning 机器学习 machine learning 线性回归 linear regression 线性模型 logic model 损失函数 loss funtion 梯度下降法 GD：gradient descent 欠拟合 underfitting 过拟合 overfitting 正则化 regularization  一、机器学习 1、监督学习 Supe">
+<meta name="twitter:image" content="http://yoursite.com/2017/10/10/02-机器学习基础知识之线性回归/02-机器学习基础知识/01%20Machine%20LearningFramework.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/10/02-机器学习基础知识之线性回归/"/>
+
+
+
+
+
+  <title>深度学习心得02| 机器学习基础之线性回归 linear regression | 曹越的快乐小站</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曹越的快乐小站</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">关于理想我从来没选择放弃，即使在灰头土脸的日子里。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/10/02-机器学习基础知识之线性回归/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曹越">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曹越的快乐小站">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深度学习心得02| 机器学习基础之线性回归 linear regression</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-10T10:47:44+08:00">
+                2017-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/深度学习/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/10/10/02-机器学习基础知识之线性回归/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/10/10/02-机器学习基础知识之线性回归/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/10/10/02-机器学习基础知识之线性回归/" class="leancloud_visitors" data-flag-title="深度学习心得02| 机器学习基础之线性回归 linear regression">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="关键词"><a href="#关键词" class="headerlink" title="关键词"></a>关键词</h1><ul>
+<li><strong>深度学习 deep learning</strong></li>
+<li><strong>机器学习 machine learning</strong></li>
+<li><strong>线性回归 linear regression</strong></li>
+<li><strong>线性模型 logic model</strong></li>
+<li><strong>损失函数 loss funtion</strong></li>
+<li><strong>梯度下降法 GD：gradient descent</strong></li>
+<li><strong>欠拟合 underfitting 过拟合 overfitting</strong></li>
+<li><strong>正则化 regularization</strong></li>
+</ul>
+<h1 id="一、机器学习"><a href="#一、机器学习" class="headerlink" title="一、机器学习"></a>一、机器学习</h1><ul>
+<li><p><strong>1、监督学习 Supervised Learning</strong></p>
+<pre><code> 训练数据training data +标准答案Labels
+                 ↓
+            机器学习算法
+                 ↓
+测试数据testing data→预测模型→预测结果             
+</code></pre></li>
+</ul>
+<p>常用的监督学习算法有：分类classification、回归regression</p>
+<p>类比：</p>
+<p>训练————老师教学生，告诉正确的答案</p>
+<p>预测————学生参加考试</p>
+<ul>
+<li><em>2、无监督学习 Unsupervised Learning*</em></li>
+</ul>
+<p>常用的无监督学习算法有：聚类、降维</p>
+<p>相对于监督学习，并没有老师指导，而且并不局限于解决有标准答案的问题</p>
+<ul>
+<li><strong>3、强化学习 Reinforcement Learning</strong></li>
+</ul>
+<p>相对于监督学习，有老师指导，对预测的结果进行评估</p>
+<h1 id="二、机器学习架构-Machine-Learning-Framework"><a href="#二、机器学习架构-Machine-Learning-Framework" class="headerlink" title="二、机器学习架构 $Machine$ $Learning$ $Framework$"></a>二、机器学习架构 $Machine$ $Learning$ $Framework$</h1><p align="center"><br>    <img src="./02-机器学习基础知识/01 Machine LearningFramework.png" width="80%"><br>    <br>    <small>   </small><br></p>
+
+<h2 id="训练步骤-Training-Procedure"><a href="#训练步骤-Training-Procedure" class="headerlink" title="训练步骤 Training Procedure"></a>训练步骤 Training Procedure</h2><ul>
+<li><p>第一步： 定义模型-假设函数集合 define a set of hypothesis function</p>
+</li>
+<li><p>第二步： 评估函数的效果 goodness of function</p>
+</li>
+<li><p>第三步： 挑选最好的函数 pick the best function</p>
+</li>
+</ul>
+<h3 id="1、模型结构-Model-Architecture"><a href="#1、模型结构-Model-Architecture" class="headerlink" title="1、模型结构 Model Architecture"></a>1、模型结构 Model Architecture</h3><ul>
+<li><p>A Single Layer of Neurons (Perceptron)</p>
+</li>
+<li><p>Multi-Layer Perceptron</p>
+</li>
+<li><p>Neural Network Model</p>
+</li>
+</ul>
+<h3 id="2、损失函数设计-Loss-Function-Design——评估函数的效果"><a href="#2、损失函数设计-Loss-Function-Design——评估函数的效果" class="headerlink" title="2、损失函数设计 Loss Function Design——评估函数的效果"></a>2、损失函数设计 Loss Function Design——评估函数的效果</h3><p>Function = Model Parameters</p>
+<p>Model Parameter Measurement</p>
+<h3 id="3、最优化-Optimization-——-找到最好的函数"><a href="#3、最优化-Optimization-——-找到最好的函数" class="headerlink" title="3、最优化 Optimization —— 找到最好的函数"></a>3、最优化 Optimization —— 找到最好的函数</h3><p>梯度下降法 Gradient Descent</p>
+<p>随机梯度下降 Stochastic Gradient Descent (SGD)</p>
+<p>Mini-Batch SGD</p>
+<p>Practical Tips</p>
+<h1 id="三、线性回归-linear-regression"><a href="#三、线性回归-linear-regression" class="headerlink" title="三、线性回归 linear regression"></a>三、线性回归 linear regression</h1><ul>
+<li><p>监督学习，输入数据（学习样本、训练数据）$D=(x_i,\hat{y}_i)_{i=1}^m$ </p>
+</li>
+<li><p>线性回归假设特征和结果满足线性关系（建立线性模型）</p>
+</li>
+<li><p>输出（预测）的结果${y’}_{i}$为连续值变量 $({x’}_{i},{y’}_{i})$</p>
+</li>
+</ul>
+<h2 id="1、线性模型："><a href="#1、线性模型：" class="headerlink" title="1、线性模型："></a>1、线性模型：</h2><p>$$h_\theta(x)=\sum_{i=0}^n \theta_i x_i=\theta_0+\theta_1 x_1 +\theta_2 x_2+……+\theta_n x_n=\theta^T x$$</p>
+<p>其中，<br>$x_1,x_2,……,x_n$ 表示特征分量$feature$</p>
+<p>$\theta_1,\theta_2,……,\theta_n$ 表示权重$weight$</p>
+<p>$\theta_0$表示偏倚项$bias$（截距）</p>
+<p>##2、损失函数 loss function：</p>
+<ul>
+<li>通过输入D找到“最合适”的线性模型</li>
+<li>损失函数用来看到线性模型与实际值之间的“差距”</li>
+<li>损失函数也称目标函数、成本函数cost function、错误函数error function</li>
+</ul>
+<p>数学表达式：<br>$$J(\theta) = \frac 1 {2m} \sum_{i=1}^m (h_\theta(x^{(i)})-y^{(i)})^2$$</p>
+<p>其中，<br>$h_\theta(x^{(i)})$ 表示预测值</p>
+<p>$y(x^{(i)})$ 表示实际值</p>
+<p>$2$是$J(\theta)$求导后相抵消，$m$表示$m$个输入值平均的差距</p>
+<h3 id="损失函数的概率解释：来源自-2"><a href="#损失函数的概率解释：来源自-2" class="headerlink" title="损失函数的概率解释：来源自[2]"></a>损失函数的概率解释：来源自[2]</h3><p>一般地，机器学习中不同的模型会有相应的目标函数。而回归模型（尤其是线性回归类）的目标函数通常用<strong>平方损失函数</strong>来作为优化的目标函数（即真实值与预测值之差的平方和）。为什么要选用误差平方和作为目标函数呢？答案可以从概率论中的<strong>中心极限定理</strong>、<strong>高斯分布</strong>等知识中找到。</p>
+<p><b>中心极限定理</b></p>
+<p>中心极限定理本身就是研究独立随机变量和的极限分布为正态分布的问题。</p>
+<p>定理：设从均值为$\mu$、方差为$\sigma^2$的任意一个总体中抽取样本量为n的样本，当n充分大时，样本均值的抽样分布$\frac {Y_n} {n}$近似服从于均值为$\mu$、方差为$\sigma^2$的正态分布</p>
+<p>中心极限定理的公式表示为：<br>设n个随机变量$X_1,X_2,……,X_n$相互独立，且具有相同的数学期望与方差，即$E(X_i)=\mu$   $D(X_i)=\sigma^2$ ，$Y_n$为随机变量值和,$Z_n$为随机变量的规范和<br>$Y_n=X_1+X_2+……+X_n$</p>
+<p>$Z_n= \frac {Y_n-E(Y_n)} {\sqrt{D(Y_n)}}=\frac {Y_n-n\mu} {\sqrt{n}\sigma} \to N(0,1)$</p>
+<h3 id="线性模型与损失函数之间的关系"><a href="#线性模型与损失函数之间的关系" class="headerlink" title="线性模型与损失函数之间的关系"></a>线性模型与损失函数之间的关系</h3><p>Case1: 假设线性模型只有一个参数(权重)$\theta$</p>
+<p>线性模型</p>
+<p>$$h_\theta(x)=\theta x$$</p>
+<p>线性模型图像</p>
+<p>输入样本有3个，即$m=3$ ，含三个输入样本${(x_1,y_1),(x_2,y_2),(x_3,y_3) = (1,1),(2,2),(3,3)}$三个输入样本正好形成直线并经过$(0,0)$点</p>
+<p>根据$\theta$（斜率）取值不同，损失函数输出不同</p>
+<p align="center"><br>    <img src="http://images.cnblogs.com/cnblogs_com/happycaoyue/1010855/o_0013.png" width="40%"><br>    <br>    <small> 一元损失函数图像  </small><br></p>
+
+<p>Case2: 假设线性模型只有两个参数(权重)$\theta_0$ $\theta_1$</p>
+<p>线性回归 + 平方损失  $\to$ 损失函数图像无局部最小值</p>
+<p>线性模型<br>$$h_\theta(x)=\theta_0+\theta_1 x$$<br>损失函数<br>$$J(\theta_0,\theta_1) = \frac 1 {2m} \sum_{i=1}^m (h_\theta(x^{(i)})-y^{(i)})^2$$<br>$$J(\theta_0,\theta_1) = \frac 1 {2m} \sum_{i=1}^m (\theta_0+\theta_1x^{(i)}-y^{(i)})^2$$</p>
+<p align="center"><br>    <img src="http://images.cnblogs.com/cnblogs_com/happycaoyue/1010855/o_0014.png" width="50%"><br>    <br>    <small> 二元损失函数图像  </small><br></p>
+
+
+<h2 id="3、梯度下降法-GD：gradient-descent"><a href="#3、梯度下降法-GD：gradient-descent" class="headerlink" title="3、梯度下降法 GD：gradient descent"></a>3、梯度下降法 GD：gradient descent</h2><p>Case1: 只有一个参数$\theta$</p>
+<p>1、随机选择$\theta^0$</p>
+<p>2、计算此处的导数值</p>
+<p>如果为正 向x轴负方向</p>
+<p>如果为负 向x轴正方向</p>
+<p>$$<br>\theta^1 = \theta^0 - \alpha\frac d{d\theta}J(\theta)<br>$$</p>
+<p>3、反复迭代，直至找到全局最小值点<br>$$<br>\theta^{i+1} = \theta^i - \alpha\frac d{d\theta}J(\theta)<br>$$</p>
+<p>Case2: 有两个参数$\theta_0$ $\theta_1$</p>
+<p>1、随机选择$\theta_0^0$ $\theta_1^0$</p>
+<p>2、计算此处的偏导数值</p>
+<p>$$<br>\frac{\partial J(\theta_0,\theta_1)}{\partial\theta_1} =\frac 1 {m} \sum_{i=1}^m (\theta_0+\theta_1x^{(i)}-y^{(i)})(x^{(i)})<br>$$</p>
+<p>$$<br>\frac{\partial J(\theta_0,\theta_1)}{\partial\theta_0} =\frac 1 {m} \sum_{i=1}^m (\theta_0+\theta_1x^{(i)}-y^{(i)})<br>$$</p>
+<p>$$<br>\theta_0^1 = \theta_0^0 - \alpha\frac\partial{\partial\theta_0}J(\theta_0，\theta_1)<br>$$</p>
+<p>$$<br>\theta_1^1 = \theta_1^0 - \alpha\frac\partial{\partial\theta_1}J(\theta_0，\theta_1)<br>$$<br>3、反复迭代<br>$$<br>\theta_0^{i+1} = \theta_0^i - \alpha\frac\partial{\partial\theta_0}J(\theta_0，\theta_1)<br>$$</p>
+<p>$$<br>\theta_1^{i+1} = \theta_1^i - \alpha\frac\partial{\partial\theta_1}J(\theta_0，\theta_1)<br>$$</p>
+<p><strong>梯度</strong></p>
+<p>矢量，有大小，有方向</p>
+<p>用倒三角$\nabla$表示</p>
+<p>梯度的方向：上升（下降）最快的方向</p>
+<p>类比：下山最快的方向就是最“陡峭”的方向</p>
+<p>梯度的大小：</p>
+<p>$\theta=(\theta_0,\theta_1,……,\theta_n)$</p>
+<p>$\nabla_\theta J=(\frac{\partial J(\theta)}{\theta_0},\frac{\partial J(\theta)}{\theta_1},……,\frac{\partial J(\theta)}{\theta_n})$</p>
+<p><strong>学习率$\alpha$</strong></p>
+<ul>
+<li><p>也称为步长，就是每次按照梯度减少的方向变化多少</p>
+</li>
+<li><p>是一个超参数hyper paramer</p>
+</li>
+</ul>
+<p align="center"><br>    <img src="http://images.cnblogs.com/cnblogs_com/happycaoyue/1010855/o_0016.png" width="60%"><br>    <br>    <small>    </small><br></p>
+
+<h2 id="4、欠拟合underfitting-过拟合overfitting"><a href="#4、欠拟合underfitting-过拟合overfitting" class="headerlink" title="4、欠拟合underfitting 过拟合overfitting"></a>4、欠拟合underfitting 过拟合overfitting</h2><p><strong>欠拟合underfitting</strong>：模型本身就不够复杂，导致难以满足<strong>训练数据</strong>的要求</p>
+<p><strong>过拟合overfitting</strong>：越复杂的模型未必在<strong>测试数据</strong>上产生更好的效果</p>
+<h2 id="5、正则化-regularization"><a href="#5、正则化-regularization" class="headerlink" title="5、正则化 regularization"></a>5、正则化 regularization</h2><p>控制参数的幅度，不让模型无法无天<br>不让其走的太大，应该更加平滑<br>修正后的损失函数（加了正则项的损失函数）<br>$$J(\theta) = \frac 1 {2m} \sum_{i=1}^m (h_\theta(x^{(i)})-y^{(i)})^2+\lambda \sum_{j=1}^n \theta_j^2$$</p>
+<p><strong>正则化的程度$\lambda$</strong></p>
+<ul>
+<li>是一个超参数hyper paramer</li>
+</ul>
+<hr>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/10/01-深度学习引论/" rel="next" title="深度学习心得01| 深度学习引论">
+                <i class="fa fa-chevron-left"></i> 深度学习心得01| 深度学习引论
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/10/03-机器学习基础知识之分类任务/" rel="prev" title="深度学习心得03| 机器学习基础之分类任务classification task">
+                深度学习心得03| 机器学习基础之分类任务classification task <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="曹越" />
+            
+              <p class="site-author-name" itemprop="name">曹越</p>
+              <p class="site-description motion-element" itemprop="description">曹越的小天地</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/happycaoyue" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/imupkucaoyue" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-globe"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.weibo.com/imupkucaoyue" target="_blank" title="Weibo">
+                    
+                      <i class="fa fa-fw fa-globe"></i>Weibo</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://wycheng.me" title="南大校草王雨城个人技术博客" target="_blank">南大校草王雨城个人技术博客</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://plushunter.github.io" title="人大应用统计硕士技术博客" target="_blank">人大应用统计硕士技术博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关键词"><span class="nav-number">1.</span> <span class="nav-text">关键词</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一、机器学习"><span class="nav-number">2.</span> <span class="nav-text">一、机器学习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、机器学习架构-Machine-Learning-Framework"><span class="nav-number">3.</span> <span class="nav-text">二、机器学习架构 $Machine$ $Learning$ $Framework$</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#训练步骤-Training-Procedure"><span class="nav-number">3.1.</span> <span class="nav-text">训练步骤 Training Procedure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、模型结构-Model-Architecture"><span class="nav-number">3.1.1.</span> <span class="nav-text">1、模型结构 Model Architecture</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、损失函数设计-Loss-Function-Design——评估函数的效果"><span class="nav-number">3.1.2.</span> <span class="nav-text">2、损失函数设计 Loss Function Design——评估函数的效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、最优化-Optimization-——-找到最好的函数"><span class="nav-number">3.1.3.</span> <span class="nav-text">3、最优化 Optimization —— 找到最好的函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、线性回归-linear-regression"><span class="nav-number">4.</span> <span class="nav-text">三、线性回归 linear regression</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、线性模型："><span class="nav-number">4.1.</span> <span class="nav-text">1、线性模型：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#损失函数的概率解释：来源自-2"><span class="nav-number">4.1.1.</span> <span class="nav-text">损失函数的概率解释：来源自[2]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线性模型与损失函数之间的关系"><span class="nav-number">4.1.2.</span> <span class="nav-text">线性模型与损失函数之间的关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、梯度下降法-GD：gradient-descent"><span class="nav-number">4.2.</span> <span class="nav-text">3、梯度下降法 GD：gradient descent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4、欠拟合underfitting-过拟合overfitting"><span class="nav-number">4.3.</span> <span class="nav-text">4、欠拟合underfitting 过拟合overfitting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5、正则化-regularization"><span class="nav-number">4.4.</span> <span class="nav-text">5、正则化 regularization</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曹越</span>
+<span id="busuanzi_container_site_pv">
+   <i class="fa fa-eye-"></i>本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+
+  <span id="busuanzi_container_site_uv">
+   <i class="fa fa-user-"></i>本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cyt2xVwFT';
+      var conf = 'a1bffb2be42605f5a43d6531f7dbf31c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("EbaweVDHiHrQymnk5wIzfHP1-gzGzoHsz", "12DUrd2KdWPF2TdD64eMkAXl");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
