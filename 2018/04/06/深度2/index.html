@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="你好, 欢迎来到曹越的快乐小站" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="吴恩达深度学习课程2：实战中的问题 学习目标 不同的初始化，产生不一样的效果  初始化，对复杂的模型，意义重大  train set, dev set, test set 之间的差异  Diagnose the bias and variance issues in your model  Learn when and how to use regularization methods such">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习心得06| 调参">
+<meta property="og:url" content="http://yoursite.com/2018/04/06/深度2/index.html">
+<meta property="og:site_name" content="曹越的快乐小站">
+<meta property="og:description" content="吴恩达深度学习课程2：实战中的问题 学习目标 不同的初始化，产生不一样的效果  初始化，对复杂的模型，意义重大  train set, dev set, test set 之间的差异  Diagnose the bias and variance issues in your model  Learn when and how to use regularization methods such">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/z8HP4oD5SAV89gxwOCG4cbxwLspc2X.p7ZO3MF7H42k!/r/dG0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/LCCZew.91fMF73CtzQxCKD.r6jKX0fGK2Z4uT69NIds!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/55URpQre7r6vLaahPCKmUiKm1xoh0aHIAk*t1FRCO5o!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/0nssAcWJVkRYIJRWHkEJE9MO0dZ7vjTCzWWZ4h3QUhM!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/CG0Te*wp..Z6UzCig*F6HgO*7UzTh8Y7yhoTxac*.rc!/r/dG4BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/ZR*VRd7luSrgtJhfGxv5r49oGpre7N8K3uuZftrmrbM!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/m4rllDdtsXYL4QjjIMkzgHZHwcKB4gtfTNftrOjC6sU!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/K2CcY6tTvoh8I8QR0AhwVS0jQLLBOtbupKz3Wvj*X8E!/r/dD8BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/J8zalCBmyDmZNOVl9g*PUNYQEEqtlCPIdefhXzgBwxo!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/gDQseXyDv0U830O1VAJYAYXDgH7BSQKmVYdwpM6PlcE!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/Hz0ty7g9ypy*YzmRcekAgW6dg2RDTuljTMlgmXhmSRQ!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/5ZT2HljMgtsc.u1q4w1vVdnjTDwC46AGaYUN3nuMHsc!/r/dGwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/3mOYD2oDblWR03s9rjdIj1RRaRYMz*jHCHhVk9qL5XE!/r/dG0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/WmE2NPrMZI5tZsNbwAIr74xR3.4m4eWtUsxqZXvHxF0!/r/dGwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/hrpNEHNCuPok4trljjjX2L9riq1jQyvJNZ*OBeTf8UE!/r/dGwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/V9bep7BvbQTi0a2Df0j7zzIqyCVuRd3HgiL32qO3tB4!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/qjh9PaKYjPXTBAGHv07MUIBrVSbONdeA6LfTCeUvjgU!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/lg*lhD*LGJqY4WcudzF5DOlE68HjpeWPB.KzZBcdGWw!/r/dPcAAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/zPrq4djwT1b6yJDcxDOvT.dBullba4ebBfRdcPCak68!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/cdnnXQnfSDfuK8t7NN90HFAEfxYUutPEQAxQeyLlaOQ!/r/dGwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/nPSTrKf2lpAhS7aBAu.kurAKoXNvPDhDjEfz0ik38RU!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/hJLLJLoiZHj08jMBFZVkj6st9Ab*O3N30ZUaNGW32hw!/r/dG0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/LwJL1JAY*aO3R3MellimhrSJarA8nKnvlJAc.DhF50M!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/d4Pon1MPjwqhsc0jzSbw.yy6J0ARLJr.fCVZxP.MnTA!/r/dG4BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/KjLIU6utOUpYYWoFt7E3frmKzvLEEHI4CxKK.dNdQKA!/r/dG0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/t3eEl55kBg3UC9g8tVFthDHkEgVIvOz**woWN8glS40!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/soXWEFDVGJRUV1XE.KDWxwxnayaMUWNgH3.srcAn4lk!/r/dOcAAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/82CDcBfLETbcKfGurhSABP2itdXdNYQTYgDnPTXCc.0!/r/dG0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/*USiJNyO41cp9Zb9CvA7TZX6dCwufrtlEhTtFfA6vWU!/r/dGwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/tZwi2y8A114B4O0p1LzD9*y25mGSTrl29wz9.T6t0KQ!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/SZXNeXztWXZ8GXfvk4NHV9GtHBy.eHdK4BjaD*zhzOw!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/w48Uuj*0hiJG4hjpVoQw04Qo5MAjexJVmfH2EeDZXtw!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://s316.photo.store.qq.com/psb?/V119hAgO09pOsG/bf1VGu06NMB3PNTWdBtsJxA*HIXblRcPHYmYx5AZPG4!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/7LB*oPb9hJiGU8GLPLiHNQzbiVsXXbqAeYOYP20Cx4Y!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/P9KNx5Jn4YIQEme6GpHZAhobvy1qWtaENIytUKEKCXw!/r/dGwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/4SkVU2K6W401gtslZYaQeX73eGicLNjcwu7BHXHDARI!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/nZeX8N6QZnmQicJxPq0yPd*qHMBU2XPpP3yfumxXkVg!/r/dG0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/J2625o3o5DZobCyFzfzYZaMn2Lws8vOxUyyH5SqO9rI!/r/dG0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/2u1Xz.scXW9S.efommtoCO.SYquVsDDcXyPew5M188s!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/0eWVjfGB3KegAcoN9LlheAQ7maall2pn5FyB0VVXmKA!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/SujRNGROa1ghush8sR55d47jTgK3ZDfzLmIGSqOA2Ic!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/X0184mbYQTfv2dnuMrEuMoEOVcW2bOwMQ5KYIn45bRo!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/vKqlNcn0GnyS2xc*NniJ8cyrIfZJI1YklivK*M*.6x4!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/jw4V82q20WhY5BeTRRi21VJlbdYIMiBJ9J0hgAjGyck!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/SKG1MzrqmzXmXVwyXG5qI1nGUFX..gE9G0aNbrj05rk!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/qunHso8vzke2Gp2s2skcvvonERY.INN5DmynqJdqHnI!/r/dG0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/qunHso8vzke2Gp2s2skcvvonERY.INN5DmynqJdqHnI!/r/dG0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/dUDarkLImE07S4EnXOGRJmNOyk8UDPFuF5ruRGH.zHw!/r/dG0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/zTSKdkXUvldCWMgOry3Y0QstqMd.gitZmTkN.AMDYmY!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/Wcfm7AZzeb8Ap2DlUE8DIz.C6VcI0TFyyW03KE77sns!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/PXVyBBr1C*hX5d2zpP5226Sm4sKflHBQ5Yo64NtkuD4!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/Nq49dPVCg1IDSKsDCf7PJ0rKkm4i8OLkelBMNsMs7S8!/r/dGwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/uj*hD4RWocSUn7CWFK9K8pA31oqgO1DQ7MLqNMitQ0M!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/fzIMZCykAOCr3fmFHClskHBSB5QUgAtioXYB1Q4Eh2M!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/37f*u3QJ686BViGR.T9QiZNwKfs0PmuHFFUxOXxlb3c!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/iqkJZljMhUfrT4y.wSdou277Ug4Enn5UQvBax7MQTF4!/r/dG4BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/cSx*M41iRzQDoRxL69pOyVR04PlysCAnh7Wjl7iPIwI!/r/dIUBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/KqpLrxD9Supa32*za4HieAsaW4KQCoshcJtmqyGZ5rg!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/uOSPstc.NY1evohCiQHl4ctsK4JJL2IWsnAJYEY0IUA!/r/dOcAAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/Iwl5kYovJ5phnAhcGmFcvkEHDJkCS9pwb1JdijEgrw0!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/BLPlNhYLNG7fkpPTUQfqWHkLIgxE9gX1B7ueO5vaGCA!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/cKVc9OOLwBDdyNw9bOh*mksMQjPHPyeImlpG6ZRPviw!/r/dIUBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/.cYFCrVdPKgHpCvsi2zSToNWMz6NjoU.IQXl7nv.ct0!/r/dIUBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/hQ3hYDenBAC0XxkpiL5sxz9TKVajaKL64dGtcC*ePgk!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/GO8XEa2g2aVGY7LyCIGYTd9gzxA8sa7EOW1zt22*Ymg!/r/dGwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/3kKXMVqs0G5z2K3cu5uF981GgCTnfb22z651D96p9dE!/r/dG0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/G7jx24gqB.ZH8vHKnDm1Qla6y9Ifa7BqS3ZnpPHfIAM!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/Vw7KIThNcZ0Pfzeld3k6mFlkuFFDl8OkkSdbUZDvb.4!/r/dD0BAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/iieHwQpqvP3Bma6WCfa0gWnygeo85Kc*LxAkyhnzKIA!/r/dDwBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/nDh9MEgb3MeqZd0Bv*yFvLAdZzxaVWhRvlwpBGAqElA!/r/dIUBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/PbQcBYbIeOGflB1l0Tci42Dv.IlRl7oYo55St8VvqHU!/r/dOcAAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/2xTnL.CBoIU6sNVjxYP*CJt.xk72nrNPhcSgC36OUsM!/r/dIUBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/njwzcwkmgt4qFG7n8W7gcRZ9MAsEki4F.qxjVHz.fp4!/r/dIUBAAAAAAAA">
+<meta property="og:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/yIpCvatK0TPaS3Jct72LE5iBAZdQBBH55a8npfT1zfY!/r/dIUBAAAAAAAA">
+<meta property="og:updated_time" content="2018-04-06T15:21:15.520Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度学习心得06| 调参">
+<meta name="twitter:description" content="吴恩达深度学习课程2：实战中的问题 学习目标 不同的初始化，产生不一样的效果  初始化，对复杂的模型，意义重大  train set, dev set, test set 之间的差异  Diagnose the bias and variance issues in your model  Learn when and how to use regularization methods such">
+<meta name="twitter:image" content="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/z8HP4oD5SAV89gxwOCG4cbxwLspc2X.p7ZO3MF7H42k!/r/dG0BAAAAAAAA">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/06/深度2/"/>
+
+
+
+
+
+  <title>深度学习心得06| 调参 | 曹越的快乐小站</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曹越的快乐小站</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">关于理想我从来没选择放弃，即使在灰头土脸的日子里。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/06/深度2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曹越">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曹越的快乐小站">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深度学习心得06| 调参</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-06T10:47:44+08:00">
+                2018-04-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/深度学习/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2018/04/06/深度2/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/04/06/深度2/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2018/04/06/深度2/" class="leancloud_visitors" data-flag-title="深度学习心得06| 调参">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="吴恩达深度学习课程2：实战中的问题"><a href="#吴恩达深度学习课程2：实战中的问题" class="headerlink" title="吴恩达深度学习课程2：实战中的问题"></a>吴恩达深度学习课程2：实战中的问题</h1><!--改善深层神经网络：超参数调试、正则化以及优化-->
+<h2 id="学习目标"><a href="#学习目标" class="headerlink" title="学习目标"></a>学习目标</h2><ul>
+<li><p>不同的初始化，产生不一样的效果</p>
+</li>
+<li><p>初始化，对复杂的模型，意义重大</p>
+</li>
+<li><p>train set, dev set, test set 之间的差异</p>
+</li>
+<li><p>Diagnose the bias and variance issues in your model</p>
+</li>
+<li><p>Learn when and how to use regularization methods such as dropout or L2 - regularization.</p>
+</li>
+<li><p>Understand experimental issues in deep learning such as Vanishing or Exploding gradients and learn how to deal with them</p>
+</li>
+<li><p>Use gradient checking to verify the correctness of your backpropagation implementation</p>
+</li>
+<li><p>理解业界构建深度神经网络应用最有效的做法。</p>
+<p>- 能够高效地使用神经网络通用的技巧，包括初始化、L2和dropout正则化、Batch归一化、梯度检验。</p>
+<p>- 能够实现并应用各种优化算法，例如mini-batch、Momentum、RMSprop和Adam，并检查它们的收敛程度。</p>
+<p>- 理解深度学习时代关于如何构建训练/开发/测试集以及偏差/方差分析最新最有效的方法。</p>
+<p>- 能够用TensorFlow实现一个神经网络。</p>
+</li>
+</ul>
+<h1 id="Week1"><a href="#Week1" class="headerlink" title="Week1"></a>Week1</h1><h1 id="构建你的机器学习应用"><a href="#构建你的机器学习应用" class="headerlink" title="构建你的机器学习应用"></a>构建你的机器学习应用</h1><!--Setting up your Machine Learning Application-->
+<h2 id="理解Train-Dev-Test-sets"><a href="#理解Train-Dev-Test-sets" class="headerlink" title="理解Train | Dev | Test sets"></a>理解Train | Dev | Test sets</h2><!--train dev test sets-->
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/z8HP4oD5SAV89gxwOCG4cbxwLspc2X.p7ZO3MF7H42k!/r/dG0BAAAAAAAA" alt=""></p>
+<ul>
+<li><p>深度学习，重在循环实验，一步步推算出最优高阶参数</p>
+</li>
+<li><p>一个领域优秀模型的高阶参数，通常不能直接用于另一个领域</p>
+</li>
+<li><p>要高效实验出优秀的高阶参数，数据的量与维度，computation configuration 计算能力特点，都很重要</p>
+</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/LCCZew.91fMF73CtzQxCKD.r6jKX0fGK2Z4uT69NIds!/r/dDwBAAAAAAAA" alt=""></p>
+<ul>
+<li>数据分割大原则<ul>
+<li>小数据（100） <code>0.6 | 0.2 | 0.2</code></li>
+<li>大数据（1000000） <code>0.99 | 0.005 | 0.005</code></li>
+</ul>
+</li>
+<li>为什么差异如此大：<ul>
+<li>不变：<code>dev|valid sets</code> 用来比较高阶参数取什么值更优</li>
+<li>因此，本质上dev sets数据需求量并不大</li>
+<li>对于大数据，是需要拿出一点点比例就够了</li>
+</ul>
+</li>
+<li>实践意义：<ul>
+<li>也许可以将90%以上的数据都留给<code>train set</code></li>
+</ul>
+</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/55URpQre7r6vLaahPCKmUiKm1xoh0aHIAk*t1FRCO5o!/r/dDwBAAAAAAAA" alt=""></p>
+<ul>
+<li>很多时候<code>train set | dev | test sets</code> 有不同的<code>distributions</code><ul>
+<li>例如在猫的图片识别中：<ul>
+<li>train set of cat pics: 高清图片</li>
+<li>dev（即valid) and test pics: 低分辨率图片</li>
+<li>所以，train vs dev sets 数据分布不同</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>以上这一点难避免，但有一点要保障：<ul>
+<li><code>dev</code> and <code>test</code> sets 数据分布要相近</li>
+</ul>
+</li>
+<li><code>test set</code> 不是非要不可<ul>
+<li><code>test set</code> 目的：实现unbias（无偏见，公正的）模型评估</li>
+<li>但这本身不是强制和必须的；为什么呢？</li>
+<li>因为毕竟<code>dev</code> and <code>test</code> sets 的分类是相似的</li>
+</ul>
+</li>
+<li>实际指导意义：<ul>
+<li>我们不是一定需要<code>test set</code>, 可以留更多数据给<code>train set</code></li>
+<li>当<code>dev set</code>和<code>test set</code>的数据占比很小，而且紧挨着，两者的分布应该不会相差太远</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="Bias-与-Variance的关系"><a href="#Bias-与-Variance的关系" class="headerlink" title="==Bias 与 Variance的关系=="></a>==Bias 与 Variance的关系==</h2><!--Bias and Variance Trade off-->
+<h3 id="主要规律与噪音的博弈度量"><a href="#主要规律与噪音的博弈度量" class="headerlink" title="主要规律与噪音的博弈度量"></a>主要规律与噪音的博弈度量</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/0nssAcWJVkRYIJRWHkEJE9MO0dZ7vjTCzWWZ4h3QUhM!/r/dDwBAAAAAAAA" alt=""></p>
+<ul>
+<li>左图: 函数线很粗旷，不少数据预测错误 （underfitting = highly biased)</li>
+<li>右图：函数线过度精细，所有数据预测正确 (overfitting = highly variance)，预测效果会变差</li>
+<li>中间：函数线平稳，有少数数据预测错误 （just right = low biased, low variance)</li>
+</ul>
+<h3 id="猫狗识别中的bias-variance-bayes-error"><a href="#猫狗识别中的bias-variance-bayes-error" class="headerlink" title="猫狗识别中的bias, variance, bayes error"></a>猫狗识别中的bias, variance, bayes error</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/CG0Te*wp..Z6UzCig*F6HgO*7UzTh8Y7yhoTxac*.rc!/r/dG4BAAAAAAAA" alt=""></p>
+<ul>
+<li><strong>bayes error</strong> :<ul>
+<li>我们可以将人类识别误差标准作为基准，可以是0，也可能是15%（更高，如果分辨率低图片）</li>
+<li>如果基准误差是 15%，那么15%就不再是high bias</li>
+</ul>
+</li>
+</ul>
+<h3 id="特例-high-bias-amp-varance"><a href="#特例-high-bias-amp-varance" class="headerlink" title="特例 high bias &amp; varance"></a>特例 <strong>high bias &amp; varance</strong></h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/ZR*VRd7luSrgtJhfGxv5r49oGpre7N8K3uuZftrmrbM!/r/dD0BAAAAAAAA" alt=""></p>
+<hr>
+<h2 id="如何突破Bias-Variance困境"><a href="#如何突破Bias-Variance困境" class="headerlink" title="==如何突破Bias-Variance困境=="></a>==如何突破Bias-Variance困境==</h2><!--Basic Recipe for Machine Learning-->
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/m4rllDdtsXYL4QjjIMkzgHZHwcKB4gtfTNftrOjC6sU!/r/dDwBAAAAAAAA" alt=""></p>
+<h3 id="降低high-bias"><a href="#降低high-bias" class="headerlink" title="降低high bias"></a>降低high bias</h3><ul>
+<li>在训练中，首先观察<code>high bias</code>，如果存在, 调试一下高阶参数<ul>
+<li>构建更大模型，抓取更多更细特征<ul>
+<li>增加隐藏层数</li>
+<li>增加每层神经元个数</li>
+</ul>
+</li>
+<li>增加训练次数：<ul>
+<li>可能有些特征，”埋藏”较深</li>
+</ul>
+</li>
+<li>尝试不同 <code>NN architecture search</code>：<ul>
+<li><!--没有详述，所以猜测内容如下--></li>
+<li>神经层构造设计<ul>
+<li>激励函数设计</li>
+</ul>
+</li>
+<li>损失函数设计</li>
+<li>学习步伐大小</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>不断训练，优化上述参数，直到 <code>high bias</code> 解决，</li>
+</ul>
+<h3 id="再降低high-variance"><a href="#再降低high-variance" class="headerlink" title="再降低high variance"></a>再降低high variance</h3><ul>
+<li>然后观察<code>high variance</code>,如果存在, 尝试以下措施<ul>
+<li>增加数据量<ul>
+<li>可能验证数据分布与训练数据差距过大</li>
+</ul>
+</li>
+<li><code>regularization</code> 正则化处理</li>
+<li>尝试不同的神经层设计<code>NN architecture search</code></li>
+</ul>
+</li>
+<li>不断训练，优化上述参数，直到<code>high variance</code>解决</li>
+<li>需要不断循环上述流程，实现<code>low bias, low variance</code></li>
+</ul>
+<h3 id="深度学习的独特优势"><a href="#深度学习的独特优势" class="headerlink" title="深度学习的独特优势"></a>深度学习的独特优势</h3><ul>
+<li><code>bias and variance tradeoff</code>难题 让deep learning 更受欢迎<ul>
+<li>传统机器学习，<code>bias and variance</code> 是矛盾体， 很难实现双降双<code>low</code></li>
+<li>深度学习, 只要有<code>bigger network</code>，和<code>more data</code>，双降是可实现的</li>
+<li><code>regularization</code>可以解决隐藏层过深而导致<code>high variance</code>的问题</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="规范你的神经网络"><a href="#规范你的神经网络" class="headerlink" title="规范你的神经网络"></a>规范你的神经网络</h1><!--Regularizing your neural network-->
+<h2 id="何时用regularization正则化"><a href="#何时用regularization正则化" class="headerlink" title="何时用regularization正则化"></a>何时用regularization正则化</h2><!--regularization-->
+<ul>
+<li>模型处于<code>overfitting</code><ul>
+<li>最重要的是， <code>low bias</code>，模型的训练效果大幅强于基准效果</li>
+<li><code>high variance</code>，验证效果距离训练效果差距明显</li>
+</ul>
+</li>
+<li>病根<ul>
+<li>除了主要特征规律，该模型抓取了不少噪音，当作规律</li>
+<li>这些噪音，不可能在验证数据中具备预测能力，所以验证效果差</li>
+</ul>
+</li>
+<li>regularization正则化意义<ul>
+<li>阻止模型学习噪音</li>
+<li>让主要特征显性，让噪音特征更隐性</li>
+</ul>
+</li>
+</ul>
+<h3 id="L2-L1-正则化如何降噪"><a href="#L2-L1-正则化如何降噪" class="headerlink" title="L2, L1 正则化如何降噪"></a><code>L2, L1</code> 正则化如何降噪</h3><ul>
+<li><code>L2, L1</code>通过<code>lambd</code>控制<code>w</code>值的大小，从而控制模型的偏执<ul>
+<li>模型偏执小了，就没有能力抓取过多的噪音，当作规律存储</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/K2CcY6tTvoh8I8QR0AhwVS0jQLLBOtbupKz3Wvj*X8E!/r/dD8BAAAAAAAA" alt=""></p>
+<ul>
+<li>Cost function 最小化： $min_{w,b}J(w,b), w\in{R^{n_x}}, b\in{R}$</li>
+<li>$J(w,b) = \frac{1}{m}\sum_{i=1}^mL(\hat{y^{(i)}},y^{(i)}) + \frac{\lambda}{2m}{||w||}_2^2$</li>
+<li><code>L2</code>: ${||w||}_2^2 = \sum_{j=1}^{n_x}w_j^2 = w^Tw$</li>
+<li><code>L1</code>: $\frac{\lambda}{2m}{||w||}_1 = \frac{\lambda}{2m}\sum_{j=1}^{n_x}|w_j|$</li>
+<li>对于<code>L1</code>, <code>w</code> will be sparse：很多0构成<ul>
+<li>一种观点：让许多<code>w</code>值归0，从而缩小模型</li>
+<li>但实际增效不大</li>
+<li>所以，实操中，<code>L2</code>用的更多</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>$lambda$: regularization parameter<ul>
+<li>帮助降低<code>high variance</code>的高阶参数</li>
+<li>python 编程中，不要用<code>lambda</code>(key word), 而要用<code>lambd</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="L2-L1-在神经网络的用法"><a href="#L2-L1-在神经网络的用法" class="headerlink" title="L2, L1 在神经网络的用法"></a><code>L2, L1</code> 在神经网络的用法</h3><ul>
+<li><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/J8zalCBmyDmZNOVl9g*PUNYQEEqtlCPIdefhXzgBwxo!/r/dD0BAAAAAAAA" alt=""><ul>
+<li>加入<code>L2</code>之后的<code>Cost function</code>的公式<ul>
+<li>$J(w^{[1]}, b^{[1]}, …, w^{[L]}, b^{[L]})$</li>
+<li>$=\frac{1}{m}\sum_{i=1}^mL({\hat{y}}^{(i)}, y^{(i)})+\frac{\lambda}{2m}\sum_{l=1}^L{||w^{[l]}||}_F^2$</li>
+<li>但，<code>L2</code>此时改名为<code>F</code>, <code>Frobenius norm</code></li>
+</ul>
+</li>
+<li><code>L2</code>的公式：<ul>
+<li>${||w^{[l]}||}_F^2 = \sum_{i=1}^{n^{[l-1]}}\sum_{j=1}^{n^{[l]}}(w_{ij}^{[l]})^2$, </li>
+<li>$w$ 已经不是<code>vector</code> 而是 <code>matrix</code> </li>
+</ul>
+</li>
+<li>参数的导数<code>dw</code>的公式<ul>
+<li>$dw^{[l]} = (from backpropagation) + \frac{\lambda}{m}w^{[l]}$</li>
+</ul>
+</li>
+<li>化简<code>w</code>的更新公式，发现<code>L1, L2</code>的实质功效：<ul>
+<li>$w^ := w^{[l]} - \alpha[(from backprop) + \frac{\lambda}{m}w^{[l]}]$</li>
+<li>$ = (1-\frac{\alpha\lambda}{m})w^{[l]} - \alpha(from backprop)$</li>
+<li>基于 $(1-\frac{\alpha\lambda}{m})$, <code>L2 or F</code>被称之为<code>weight decay</code></li>
+<li><code>L1, L2</code>的效用：压缩模型<ul>
+<li><code>lambd</code>越大，<code>w</code>被压缩的越多，模型就越小，</li>
+<li>抓取特征能力就越弱，抓取噪音的能力就更弱了</li>
+<li><!--反之亦然，但反向操作的情况，不知道有没有人这么做？-->
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="如何理解-L2降低overfitting-or-high-variance"><a href="#如何理解-L2降低overfitting-or-high-variance" class="headerlink" title="如何理解 L2降低overfitting or high variance?"></a>如何理解 L2降低overfitting or high variance?</h2><!--Why regularization reduces overfitting?-->
+<h3 id="L2克服overfitting理解1：压缩模型，控制偏执"><a href="#L2克服overfitting理解1：压缩模型，控制偏执" class="headerlink" title="L2克服overfitting理解1：压缩模型，控制偏执"></a>L2克服overfitting理解1：压缩模型，控制偏执</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/gDQseXyDv0U830O1VAJYAYXDgH7BSQKmVYdwpM6PlcE!/r/dDwBAAAAAAAA" alt=""></p>
+<ul>
+<li><code>Cost</code>: $J(w^{[1]}, b^{[1]}, …, w^{[L]}, b^{[L]})$</li>
+<li>$=\frac{1}{m}\sum_{i=1}^mL(\hat{y^{(i)}, y^{(i)}})+\frac{\lambda}{2m}\sum_{l=1}^L{||w^{[l]}||}_F^2$</li>
+<li>要让上述<code>Cost</code>最小化，<code>L2</code>值也需要最小化，那么</li>
+<li>如果我们将<code>lambda</code>设置比较大，$w^{[l]}$就必须变小，甚至接近0, 并非图中夸张的将部分神经元直接变成0，留下少数神经元不变</li>
+<li>结果是，一部分<code>w</code>都变很小，导致一部分神经元处于休眠状态, 模型缩水，噪音学习减少，<code>high variance</code>被下降</li>
+</ul>
+<h3 id="L2克服overfitting理解2：从非线性模型-转化为-线性模型，实现弱化模型学习能力"><a href="#L2克服overfitting理解2：从非线性模型-转化为-线性模型，实现弱化模型学习能力" class="headerlink" title="L2克服overfitting理解2：从非线性模型 转化为 线性模型，实现弱化模型学习能力"></a>L2克服overfitting理解2：从非线性模型 转化为 线性模型，实现弱化模型学习能力</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/Hz0ty7g9ypy*YzmRcekAgW6dg2RDTuljTMlgmXhmSRQ!/r/dD0BAAAAAAAA" alt=""></p>
+<ul>
+<li>基于上述分析，将<code>lambda</code>设置比较大时，$w^{[l]}$就必须变小，甚至接近0</li>
+<li><code>linear combination</code>得到的<code>z</code>就越小，从而让<code>tanh</code>函数实质上变成了$y=x$函数</li>
+<li>对应的导数变成1，这样一来，不论有多少层隐藏层，都是linear combination</li>
+<li>简单的linear函数的预测能力很弱，因此，不会出现学习噪音，导致验证值较差，产生的<code>high variance</code></li>
+</ul>
+<ul>
+<li>如果使用<code>L2</code>,做backward propagation时，一定要用新Cost公式<ul>
+<li><code>Cost</code>: $J(w^{[1]}, b^{[1]}, …, w^{[L]}, b^{[L]})$</li>
+<li>$=\frac{1}{m}\sum_{i=1}^mL(\hat{y^{(i)}, y^{(i)}})+\frac{\lambda}{2m}\sum_{l=1}^L{||w^{[l]}||}_F^2$ </li>
+<li>$L2$ 是Andrew Ng最常用的<code>regularization</code> 方法</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="dropout抛弃神经元的正则化"><a href="#dropout抛弃神经元的正则化" class="headerlink" title="dropout抛弃神经元的正则化"></a>dropout抛弃神经元的正则化</h2><h3 id="dropout如何降低high-variance"><a href="#dropout如何降低high-variance" class="headerlink" title="dropout如何降低high variance"></a>dropout如何降低high variance</h3><ul>
+<li>抛弃神经元，每个样本或批量训练的是一个缩小模型，最后叠加在一起，仍旧是一个缩小版模型，从而弱化模型学习能力；</li>
+<li>随机抛弃神经元，让任何一个神经元的参数无法过度强化，从而均衡各参数的能力，杜绝出现在某一方面过去偏执</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/5ZT2HljMgtsc.u1q4w1vVdnjTDwC46AGaYUN3nuMHsc!/r/dGwBAAAAAAAA" alt=""></p>
+<ul>
+<li>每训练一个样本时，随机筛掉50%的神经元（每层输出值中50%的值趋近于0），相当于生成一个小模型</li>
+<li>每次训练一个新样本，会面对一个新的小模型（保留50%神经元），来进行训练</li>
+</ul>
+<h3 id="Inverted-dropout-代码逻辑"><a href="#Inverted-dropout-代码逻辑" class="headerlink" title="Inverted dropout 代码逻辑"></a>Inverted dropout 代码逻辑</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/3mOYD2oDblWR03s9rjdIj1RRaRYMz*jHCHhVk9qL5XE!/r/dG0BAAAAAAAA" alt=""></p>
+<ul>
+<li>如果保留80%神经元，<code>keep_prob=0.8</code>, 随机筛掉20%</li>
+<li>对第三层进行上述<code>dropout</code>处理，公式如下<ul>
+<li><code>a3</code>: 进入第三层的神经元矩阵</li>
+<li>随机筛掉20%的神经元输出<ul>
+<li><code>d3=np.random.rand(a3.shape[0],a3.shape[1])&lt;keep_prob</code></li>
+<li><code>a3 = np.multiply(a3, d3)</code></li>
+</ul>
+</li>
+<li>下面公式的目的：筛掉20%数量，作为补偿，要提高现存输出值的幅度<ul>
+<li><code>a3 /= keep_prob</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="预测不做-dropout-处理"><a href="#预测不做-dropout-处理" class="headerlink" title="预测不做 dropout 处理"></a>预测不做 dropout 处理</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/WmE2NPrMZI5tZsNbwAIr74xR3.4m4eWtUsxqZXvHxF0!/r/dGwBAAAAAAAA" alt=""></p>
+<ul>
+<li>测试中，不使用任何dropout</li>
+<li>也没有任何<code>scaling</code> 例如 <code>/= keep_prob</code></li>
+</ul>
+<hr>
+<h2 id="理解dropout克服overfitting"><a href="#理解dropout克服overfitting" class="headerlink" title="理解dropout克服overfitting"></a>理解dropout克服overfitting</h2><!--Understanding Dropout-->
+<p>关键词：dropout, overfitting, high variance, keep_prob</p>
+<ul>
+<li><p>直觉1:</p>
+<ul>
+<li>随机丢掉某些层中的神经元，</li>
+<li>缩小模型，降低对噪音学习，</li>
+<li>从而降低<code>high variance</code></li>
+</ul>
+</li>
+<li><p>直觉2:</p>
+<ul>
+<li>以单一输出层模型为例，对输入层做随机<code>dropout</code>,</li>
+<li>无法完全依靠任何一个特征<code>feature</code>，来挑模型预测能力的大梁，</li>
+<li>需要将信任平滑到输入层的所有特征值<code>features</code>上, 避免出现一个神经元及其参数一家独大</li>
+<li>结果接近于：<code>L2</code>的<code>weight decay</code> ,让所有模型内参数值统一都缩小</li>
+</ul>
+</li>
+<li><p>应用： 下图（右大图), 理论上，对任何一层都可以做<code>dropout</code>:</p>
+<ul>
+<li>输入层： 通常不希望减少特征值的数量，所以<code>keep_prob = 1.0</code><ul>
+<li>但图像处理问题<code>computer vision</code>，CNN模型经常用<code>dropout</code>处理输入层，因为输入层特征值太大，如果模型更深，数据量经常会不够，产生<code>high bias</code></li>
+<li>因此，不得不<code>dropout</code>处理输入层，让输入层神经元变少，模型深也依然可以应付，也不会要求极端的样本数量</li>
+</ul>
+</li>
+<li>隐藏层：<ul>
+<li>如果担心该层会出现<code>overfitting or high variance</code>，就<code>keep_prob=0.5</code>或更小；</li>
+<li>如果不是很担心上述问题，可以就<code>keep_prob = 0.8</code>左右，甚至<code>keep_prob=1.0</code></li>
+</ul>
+</li>
+<li>实操上：<ul>
+<li>通常只需要设置一个<code>keep_prob</code>值供所有需要<code>dropout</code>的层使用，其他层自然无需设置<code>dropout</code>或者<code>keep_prob=1.0</code>，从而减少寻找最优<code>keep_prob</code>的计算量</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/hrpNEHNCuPok4trljjjX2L9riq1jQyvJNZ*OBeTf8UE!/r/dGwBAAAAAAAA" alt=""></p>
+</li>
+<li><p>弱点代价：</p>
+<ul>
+<li>无法直接使用<code>loss plotting</code>，来验证模型<code>gradient descent</code>是否表现良好，因为训练过程中产生了很多模型，每个模型在<code>dropout</code>层，使用不同的<code>features</code>特征值来构建模型的预测能力，因此<code>cost function</code>无法构建一个平均化的众多模型的总和</li>
+</ul>
+</li>
+<li><p>实操中</p>
+<ul>
+<li>先关闭<code>keep_prob</code>或者设置<code>keep_prob=1.0</code>, 看看<code>loss plotting</code>是否正常</li>
+<li>如果正常，就可以放心进行<code>keep_prob</code>开启状态下的训练了</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="其他降低overfitting或underfitting的办法？"><a href="#其他降低overfitting或underfitting的办法？" class="headerlink" title="其他降低overfitting或underfitting的办法？"></a>其他降低overfitting或underfitting的办法？</h2><h3 id="用data-augmentation增加fake-data扩大数据量"><a href="#用data-augmentation增加fake-data扩大数据量" class="headerlink" title="用data augmentation增加fake data扩大数据量"></a>用<code>data augmentation</code>增加<code>fake data</code>扩大数据量</h3><ul>
+<li>模型大小深浅不变，更多的数据能帮助模型降低<code>high variance</code>，弱化偏执</li>
+</ul>
+<ul>
+<li><code>data augmentation</code>如何工作？对原数据做变形处理（见下图）<ul>
+<li>旋转， 放大缩小， 翻转， 弯曲变形等</li>
+<li>原则上要尽可能模仿真实世界的变形特点和幅度</li>
+<li>真实的增量数据肯定优于上述<code>fake data</code>，但可能获取成本太高，不现实</li>
+<li>如果所有图片猫身体在左边，模型会误认为“身在左边”是猫的重要特征用于预测</li>
+<li>让所有样本，拥有各类变形，模型就不会对某一种变形产生偏执与迷恋，帮助模型不纠结各类变形，穿透去学习更深层规律特征上</li>
+<li>所以，<code>data augmentation</code> 也是一种regularization</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/V9bep7BvbQTi0a2Df0j7zzIqyCVuRd3HgiL32qO3tB4!/r/dD0BAAAAAAAA" alt=""></p>
+<ul>
+<li><code>early stopping</code>也能降<code>high variance</code><ul>
+<li>在中间停止训练，虽然<code>training loss</code>无法降到最低，但<code>dev loss</code>停留在最低值附近</li>
+<li>实质：只训练一半，当dev error出现最优值的时候，就停止训练</li>
+<li>弱点：没有<code>orthogalization</code>, 深度学习独有的优势<ul>
+<li>先用一组独立的方法，全力让模型overfit</li>
+<li>在用一组独立的方法，全力让模型规避overfit, avoid high variance, 或降噪</li>
+<li>early stopping: 用提前终止训练，找到overfit 和 underfit之间的最优平衡<ul>
+<li>用同一个方法来平衡overfit and underfit</li>
+<li>影响：<ul>
+<li>不能将overfit and 去high variance做到最好</li>
+<li>但执行相对简单</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>L2优劣：<ul>
+<li>优点：<ul>
+<li>先做到overfit,</li>
+<li>然后让模型用L2训练足够久，就能做到去high variance；</li>
+</ul>
+</li>
+<li>弱点：<ul>
+<li>需要大量计算</li>
+<li>尝试多个值，获取最优的<code>lambda</code>值</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>建议：<ul>
+<li>如果配置可以，用L2，不用early stopping</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/qjh9PaKYjPXTBAGHv07MUIBrVSbONdeA6LfTCeUvjgU!/r/dDwBAAAAAAAA" alt=""></p>
+<hr>
+<h1 id="定义你的优化问题"><a href="#定义你的优化问题" class="headerlink" title="定义你的优化问题"></a>定义你的优化问题</h1><!--Set up your optimization problem-->
+<h2 id="如何标准化输入值？"><a href="#如何标准化输入值？" class="headerlink" title="如何标准化输入值？"></a>如何标准化输入值？</h2><!--Normalizing Inputs (send today)-->
+<p>关键词：<code>learning_rate</code>, <code>input_normalization</code>, <code>divergence</code>, <code>mean</code>, <code>variance</code></p>
+<h3 id="意义：-加速训练"><a href="#意义：-加速训练" class="headerlink" title="意义： 加速训练"></a>意义： 加速训练</h3><h3 id="实质：规范均值和区间"><a href="#实质：规范均值和区间" class="headerlink" title="实质：规范均值和区间"></a>实质：规范均值和区间</h3><ul>
+<li>方法1: $x - \mu$, $\mu$ as mean of x, 效果见下图（中）<ul>
+<li>$x1, x2$ 原先均值差异巨大，现在的均值都变成了<code>0.0</code></li>
+</ul>
+</li>
+<li>方法2: $\frac{x}{\sigma^2}$, $\sigma^2$ as variance of x<ul>
+<li>$x1, x2$ 的<code>variance</code>方差,都变成了<code>1.0</code>， 效果见下图（右）</li>
+<li>处理前，$x1, x2$ 的分布没有改变，只是分布的区间都在[-1,1]之间了， 效果见下图（中）</li>
+</ul>
+</li>
+<li>规范均值为0和方差为1</li>
+<li>确保：train | dev | test 都得到相同的标准化处理，确保他们的分布相对不变</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/lg*lhD*LGJqY4WcudzF5DOlE68HjpeWPB.KzZBcdGWw!/r/dPcAAAAAAAAA" alt=""></p>
+<h3 id="标准化加速训练的实质"><a href="#标准化加速训练的实质" class="headerlink" title="标准化加速训练的实质"></a>标准化加速训练的实质</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/zPrq4djwT1b6yJDcxDOvT.dBullba4ebBfRdcPCak68!/r/dDwBAAAAAAAA" alt=""></p>
+<ul>
+<li>情景：$x1$ 在<code>[0,1000]</code>之间, $x2$ 在<code>[0,1]</code>之间<ul>
+<li>如果不做<code>input normalization</code>处理</li>
+<li>可能导致： $w1$ 可能处于特别小的区间， $w2$ 处于特别大的区间</li>
+<li>$J, w1, w2$ 的函数图，多半会如上图（上1）</li>
+<li>在更新最优参数，不断探寻损失值最小化的过程中，<code>learning_rate</code>学习率不得不变得很小，从而在<code>w1</code>的狭小空间中有序推进，否则容易产生<code>divergence</code>散度，会远离损失最小值。见上图（下1）</li>
+<li>但<code>learning_rate</code>很小，在<code>w2</code>方向上推进，自然训练很慢</li>
+</ul>
+</li>
+<li><p>情景：如果将上述$x1, x2$做<code>方法1+方法2</code>处理</p>
+<ul>
+<li>可能导致： $w1$ 和 $w2$ 的空间很均匀规则，比如<code>[0,1] or [-1,1]</code>之间</li>
+<li>$J, w1, w2$ 的函数图，多半会如上图（上2）</li>
+<li>在更新最优参数，因为$w1,w2$ 分布均匀，<code>learning_rate</code>学习率可以设计大一点，不用担心产生<code>divergence</code>散度的问题。见上图（下2）</li>
+<li><code>learning_rate</code>设置较大，在<code>W1, W2</code>方向上，都可以快速推进</li>
+</ul>
+<p>​</p>
+<p>​</p>
+</li>
+</ul>
+<hr>
+<h2 id="梯度消失和梯度爆炸"><a href="#梯度消失和梯度爆炸" class="headerlink" title="梯度消失和梯度爆炸"></a>梯度消失和梯度爆炸</h2><!--Vanishing and Exploding gradients (checked)-->
+<p>关键词：gradients, vanishing, exploding, slope</p>
+<h3 id="实质：初始参数的设定问题"><a href="#实质：初始参数的设定问题" class="headerlink" title="实质：初始参数的设定问题"></a>实质：初始参数的设定问题</h3><ul>
+<li>很深的模型, 每一层的weights，经过正向或反向传播，会有指数效应</li>
+<li>如果weight值里有大于1的数，产出预测值时，会出现梯度爆炸</li>
+<li>反之，梯度消失</li>
+<li>反向传播时，指数效应会在weights 更新幅度爆炸或消失中体现</li>
+<li>因此，梯度爆炸时，很难让损失值变小；梯度消失时，损失值变小会特别慢</li>
+<li>解决方案：在参数初始化上要用心</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/cdnnXQnfSDfuK8t7NN90HFAEfxYUutPEQAxQeyLlaOQ!/r/dGwBAAAAAAAA" alt=""></p>
+<hr>
+<h2 id="模型参数初始化"><a href="#模型参数初始化" class="headerlink" title="模型参数初始化"></a>模型参数初始化</h2><!--Weights initialization for Neural network （checked)-->
+<p>关键词：weights_initialization, variance</p>
+<h3 id="模型初始参数控制在1附近"><a href="#模型初始参数控制在1附近" class="headerlink" title="模型初始参数控制在1附近"></a>模型初始参数控制在1附近</h3><ul>
+<li>从最简单的例子开始： <code>4 input neurons, 1 output neuron</code> 见下图（左上部）<ul>
+<li>目的：让<code>z</code>不要太大或太小<ul>
+<li>$z = w_1x_1 + w_2x_2 + … + w_nx_n + (b)$ 这里姑且忽略<code>b</code></li>
+<li>让$z$不能过大过小<ul>
+<li>如果<code>n</code>层数很多，那么<code>w</code>值就需要够小</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>解决方案：<ul>
+<li>让每一层的<code>w</code>不要比<code>1</code>大太多，也不要比<code>1</code>小太多</li>
+<li>这么做不能消除梯度爆炸和消失，但可以缓解病情</li>
+<li><!--为什么只是部分解决？因为指数关系还在？-->
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="寻找W和n之间的关系函数"><a href="#寻找W和n之间的关系函数" class="headerlink" title="寻找W和n之间的关系函数"></a>寻找W和n之间的关系函数</h3><ul>
+<li>如何将<code>w</code>设置在合适的大小？<ul>
+<li>$\sigma(w) = \frac{1}{n}$ 用<code>n</code>来限定<code>w&#39;s variance</code></li>
+<li>$W_{rand}^{[l]} = np.random.rand(W.shape)$</li>
+<li>$C_{ctrl} = np.sqrt(\frac{1}{n^{[l-1]}})$<ul>
+<li>如果<code>g(z)=relu(z)</code>, use $\frac{2}{n^{[l-1]}}$</li>
+<li>如果<code>g(z) = tanh(z)</code>, use $\frac{1}{n^{[l-1]}}$</li>
+<li>还有的paper, 推荐 $\frac{2}{n^{[l-1]+n^{[l]}}}$</li>
+<li>可以在如何定义更合适的 $\sigma$ <code>variance</code> 上下功夫</li>
+<li>也可以设置一个次级高阶参数(作为<code>varance</code>的乘数)，在训练中找到最佳的该参数值</li>
+</ul>
+</li>
+<li>$W^{[l]} = W_{rand}^{[l]}C_{ctrl}$</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/nPSTrKf2lpAhS7aBAu.kurAKoXNvPDhDjEfz0ik38RU!/r/dDwBAAAAAAAA" alt=""></p>
+<hr>
+<h2 id="gradient-checking导数验证"><a href="#gradient-checking导数验证" class="headerlink" title="gradient checking导数验证"></a>gradient checking导数验证</h2><!--Numerical Approximation of Gradients-->
+<p>关键词：gradient_checking, backprop, slope, epsilon, order_O</p>
+<h3 id="验证backprop"><a href="#验证backprop" class="headerlink" title="验证backprop"></a>验证backprop</h3><h3 id="计算精度高但费时"><a href="#计算精度高但费时" class="headerlink" title="计算精度高但费时"></a>计算精度高但费时</h3><ul>
+<li>应用：手动计算<code>slope</code>，用2倍的 $\epsilon$ 来计算<code>slope</code>，验证模型代码提供的自动<code>slope</code>值<ul>
+<li>公式： $f^\prime(\theta)=\lim_{\epsilon\to0}\frac{f(\theta+\epsilon)-f(\theta-\epsilon)}{2\epsilon}$, </li>
+<li>不是 $f^\prime(\theta)=\lim_{\epsilon\to0}\frac{f(\theta+\epsilon)-f(\theta)}{\epsilon}$</li>
+<li>好处：<ul>
+<li>当 $\epsilon$ 为0.01</li>
+<li>上述方法产生的误差幅度是$O(\epsilon^2)$, 误差幅度为0.0001倍</li>
+<li>用1倍的 $\epsilon$ 来计算<code>slope</code>，误差幅度是$O(\epsilon)$， 误差幅度为0.01倍</li>
+<li>因此精准度更高，是优点；但计算量比单倍计算方法要慢</li>
+<li>$$f^\prime(\theta)=\lim_{\epsilon\to0}\frac{f(\theta+\epsilon)-f(\theta-\epsilon)}{2\epsilon}$$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/hJLLJLoiZHj08jMBFZVkj6st9Ab*O3N30ZUaNGW32hw!/r/dG0BAAAAAAAA" alt=""></p>
+<hr>
+<h2 id="模型训练中做gradient-checking"><a href="#模型训练中做gradient-checking" class="headerlink" title="模型训练中做gradient checking"></a>模型训练中做gradient checking</h2><!--Gradient Checking-->
+<h3 id="why-寻找模型backprop中的错误"><a href="#why-寻找模型backprop中的错误" class="headerlink" title="why - 寻找模型backprop中的错误"></a>why - 寻找模型backprop中的错误</h3><h3 id="将所有的parameters排成一列"><a href="#将所有的parameters排成一列" class="headerlink" title="将所有的parameters排成一列"></a>将所有的parameters排成一列</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/LwJL1JAY*aO3R3MellimhrSJarA8nKnvlJAc.DhF50M!/r/dD0BAAAAAAAA" alt=""></p>
+<p>求出gradient checking值，与gradient值做比较:</p>
+<ul>
+<li>如果误差只有$10^{-7}$, 说明<strong>gradient</strong>算的没问题</li>
+<li>如果误差只有$10^{-5}$, 说明<strong>gradient</strong>可能没问题，需要检查代码</li>
+<li>如果误差只有$10^{-3}$, 说明<strong>gradient</strong>肯定有问题</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/d4Pon1MPjwqhsc0jzSbw.yy6J0ARLJr.fCVZxP.MnTA!/r/dG4BAAAAAAAA" alt=""></p>
+<hr>
+<h2 id="Gradient-Checking细节问题"><a href="#Gradient-Checking细节问题" class="headerlink" title="Gradient Checking细节问题"></a>Gradient Checking细节问题</h2><!--Gradient CheckingImplementation Notes-->
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/KjLIU6utOUpYYWoFt7E3frmKzvLEEHI4CxKK.dNdQKA!/r/dG0BAAAAAAAA" alt=""></p>
+<ul>
+<li>在训练中不要使用这种方法;</li>
+<li>如果计算有错误, 查看<strong>dw, db</strong>组成部分的</li>
+<li>要记住规范化的损失函数公式，会更复杂</li>
+<li>对于使用抛弃层的模型,要先关闭抛弃层然后再计算</li>
+<li>对比:现在随机初始化的时候计算, 然后在训练几次之后再算一遍。</li>
+</ul>
+<hr>
+<h1 id="第二周-优化算法"><a href="#第二周-优化算法" class="headerlink" title="第二周 优化算法"></a>第二周 优化算法</h1><!--Optimization Algorithms-->
+<h2 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a>Learning Objectives</h2><ul>
+<li>几个常用的学习算法 optimization methods such as <strong>(Stochastic) Gradient Descent</strong>, <strong>Momentum</strong>, <strong>RMSProp</strong> and <strong>Adam</strong><ul>
+<li><u>什么是学习算法</u>: 优化过的快速更新参数的算法</li>
+</ul>
+</li>
+<li>用随机小批量样本，加速学习和改进优化 Use random minibatches to accelerate the convergence and improve the optimization<ul>
+<li><u>应用痛点</u>：快速生成训练结果，因为将全部样本训练分割成众多小样本训练</li>
+</ul>
+</li>
+<li>学习率的消减和在学习算法中的应用 the benefits of learning rate decay and apply it to your optimization<ul>
+<li><u>应用痛点</u>：不用费劲尝试最佳learning_rate</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="mini-batch-gradient-descent"><a href="#mini-batch-gradient-descent" class="headerlink" title="mini-batch gradient descent"></a>mini-batch gradient descent</h2><h3 id="意义"><a href="#意义" class="headerlink" title="意义"></a>意义</h3><ul>
+<li>深度学习，是实验科学，需要反复实验，不停修正</li>
+<li>要求快速训练，得到验证结果 <ul>
+<li>但1000000样本，想看损失值，全样本训练一次，太慢太耗时</li>
+<li>我们要频繁重复：实验，修改超参数，再实验</li>
+<li>关键是要能快速了解损失值<strong><u>动态变化细节</u></strong>， 怎么办？</li>
+<li>如果分割成无数个32， 64或 128为一组（一批）的小样本集合，一个集合出一次损失值</li>
+<li>这样短时间，看到多个损失值，看到动态变化轨迹</li>
+</ul>
+</li>
+<li>mini-batch gradient descent 帮助<strong><u>加速实验循环速度，展示动态变化细节</u></strong></li>
+</ul>
+<h3 id="Batch-vs-Stochastic-vs-Mini-batch-gradient-descent"><a href="#Batch-vs-Stochastic-vs-Mini-batch-gradient-descent" class="headerlink" title="Batch vs Stochastic vs Mini-batch gradient descent"></a>Batch vs Stochastic vs Mini-batch gradient descent</h3><ul>
+<li><strong>Vectorization</strong>: 加速多样本计算，无需loop，提高效率</li>
+<li>Batch gradient descent 是对全部样本做backward prop<ul>
+<li>比如，5000000样本，vectorization能高效训练 <u>(forward, backward)</u> 得到最终损失值，</li>
+<li>但出一次损失值，耗时太久</li>
+</ul>
+</li>
+<li>stochastic gradient descent 针对单一样本做backward prop<ul>
+<li>很快看见损失值，因为只算一个样本</li>
+<li>但Vectorization用不上，整体训练太低效</li>
+</ul>
+</li>
+<li>mini-batch gradient descent 是对小份样本(mini-batch)做backward prop<ul>
+<li>如果将全部样本，切割成5000份，1000/份</li>
+<li>出一次损失值，只需计算一个小样本组，等待时间可接受</li>
+<li>每个一小份样本组内部做 <u>(forward, backward)</u> ，用vectorization做一次得到损失值，训练效率没有明显丢失</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/t3eEl55kBg3UC9g8tVFthDHkEgVIvOz**woWN8glS40!/r/dD0BAAAAAAAA" alt=""></p>
+<h3 id="符号"><a href="#符号" class="headerlink" title="符号"></a>符号</h3><ul>
+<li>$X$ 总样本维度（n, 5000000)</li>
+<li>$x^{(i)}$ 单个样本</li>
+<li>$z^{[l]}$ 第L层的线性处理值</li>
+<li>$X^{\{1\}}$ 第一个小批量样本</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/soXWEFDVGJRUV1XE.KDWxwxnayaMUWNgH3.srcAn4lk!/r/dOcAAAAAAAAA" alt=""></p>
+<h3 id="mini-batch-gradient-descent-执行代码"><a href="#mini-batch-gradient-descent-执行代码" class="headerlink" title="mini-batch gradient descent 执行代码"></a>mini-batch gradient descent 执行代码</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/82CDcBfLETbcKfGurhSABP2itdXdNYQTYgDnPTXCc.0!/r/dG0BAAAAAAAA" alt=""></p>
+<hr>
+<h2 id="Understanding-mini-batch-gradient-descent"><a href="#Understanding-mini-batch-gradient-descent" class="headerlink" title="Understanding mini-batch gradient descent"></a>Understanding mini-batch gradient descent</h2><h3 id="损失图对比"><a href="#损失图对比" class="headerlink" title="损失图对比"></a>损失图对比</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/*USiJNyO41cp9Zb9CvA7TZX6dCwufrtlEhTtFfA6vWU!/r/dGwBAAAAAAAA" alt=""></p>
+<h3 id="Batch-vs-Stochastic-vs-mini-batch-损失值图比较"><a href="#Batch-vs-Stochastic-vs-mini-batch-损失值图比较" class="headerlink" title="Batch vs Stochastic vs mini-batch 损失值图比较"></a>Batch vs Stochastic vs mini-batch 损失值图比较</h3><p>Batch gradient descent: 虽然整套训练较快（使用了vectorization), 但每次损失值更新很慢（需要计算所有样本）</p>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/tZwi2y8A114B4O0p1LzD9*y25mGSTrl29wz9.T6t0KQ!/r/dDwBAAAAAAAA" alt=""></p>
+<h3 id="如何选择mini-batch-size"><a href="#如何选择mini-batch-size" class="headerlink" title="如何选择mini_batch_size ?"></a>如何选择mini_batch_size ?</h3><ul>
+<li>什么情景下用mini_batch?</li>
+<li>mini_batch_size应该多大？</li>
+<li>不要超出你的cpu|gpu 内存</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/SZXNeXztWXZ8GXfvk4NHV9GtHBy.eHdK4BjaD*zhzOw!/r/dD0BAAAAAAAA" alt=""></p>
+<h2 id="Exponentially-Weighted-Averages"><a href="#Exponentially-Weighted-Averages" class="headerlink" title="Exponentially Weighted Averages"></a>Exponentially Weighted Averages</h2><h3 id="意义-1"><a href="#意义-1" class="headerlink" title="意义"></a>意义</h3><ul>
+<li>帮助理解其他优于gradient descent 算法</li>
+<li>是理解其他算法的基础 <!--Andrew Ng was born in London--></li>
+</ul>
+<h3 id="伦敦10日气温均线"><a href="#伦敦10日气温均线" class="headerlink" title="伦敦10日气温均线"></a>伦敦10日气温均线</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/w48Uuj*0hiJG4hjpVoQw04Qo5MAjexJVmfH2EeDZXtw!/r/dD0BAAAAAAAA" alt=""></p>
+<ul>
+<li>exponential weighted average 公式及理解</li>
+</ul>
+<p><img src="http://s316.photo.store.qq.com/psb?/V119hAgO09pOsG/bf1VGu06NMB3PNTWdBtsJxA*HIXblRcPHYmYx5AZPG4!/r/dDwBAAAAAAAA" alt=""></p>
+<hr>
+<h2 id="Understanding-Exponential-Weighted-Average"><a href="#Understanding-Exponential-Weighted-Average" class="headerlink" title="Understanding Exponential Weighted Average"></a>Understanding Exponential Weighted Average</h2><h3 id="Exponential是如何而来？"><a href="#Exponential是如何而来？" class="headerlink" title="Exponential是如何而来？"></a>Exponential是如何而来？</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/7LB*oPb9hJiGU8GLPLiHNQzbiVsXXbqAeYOYP20Cx4Y!/r/dDwBAAAAAAAA" alt=""></p>
+<h3 id="天数周期计算公式是怎么来的"><a href="#天数周期计算公式是怎么来的" class="headerlink" title="天数周期计算公式是怎么来的"></a>天数周期计算公式是怎么来的</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/P9KNx5Jn4YIQEme6GpHZAhobvy1qWtaENIytUKEKCXw!/r/dGwBAAAAAAAA" alt=""></p>
+<h3 id="为什么选用Exponential-Weighted-Average-求移动均线值"><a href="#为什么选用Exponential-Weighted-Average-求移动均线值" class="headerlink" title="为什么选用Exponential Weighted Average 求移动均线值"></a>为什么选用Exponential Weighted Average 求移动均线值</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/4SkVU2K6W401gtslZYaQeX73eGicLNjcwu7BHXHDARI!/r/dD0BAAAAAAAA" alt=""></p>
+<h2 id="Bias-Correction-in-Exponential-Weighted-Average"><a href="#Bias-Correction-in-Exponential-Weighted-Average" class="headerlink" title="Bias Correction in Exponential Weighted Average"></a>Bias Correction in Exponential Weighted Average</h2><h3 id="存在价值"><a href="#存在价值" class="headerlink" title="存在价值"></a>存在价值</h3><ul>
+<li>让exponential weighted average 计算更加准确</li>
+<li>哪里存在不准确<ul>
+<li>第3步，化简后的公式，解释在早期，</li>
+<li>$\theta_1=40, \theta_2=10$ 时，</li>
+<li>$V_{实际1}=\frac{40}{1}, V_{实际2}=\frac{40+10}{2}$， </li>
+<li>但是 $V_1=8, V_2 = 8.04$ </li>
+<li>这就是绿线和紫线差距的由来</li>
+</ul>
+</li>
+<li>如何纠正</li>
+<li>直观数学原理</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/nZeX8N6QZnmQicJxPq0yPd*qHMBU2XPpP3yfumxXkVg!/r/dG0BAAAAAAAA" alt=""></p>
+<h3 id="Bias-Correct-不是必须"><a href="#Bias-Correct-不是必须" class="headerlink" title="Bias Correct 不是必须"></a>Bias Correct 不是必须</h3><ul>
+<li>并不是所有人都在意早期阶段的bias问题</li>
+</ul>
+<hr>
+<h2 id="Gradient-Descent-with-Momentum"><a href="#Gradient-Descent-with-Momentum" class="headerlink" title="Gradient Descent with Momentum"></a>Gradient Descent with Momentum</h2><h3 id="一句话"><a href="#一句话" class="headerlink" title="一句话"></a>一句话</h3><ul>
+<li>Gradient descent + exponential weighted average = momentum 比标准的gradient descent 表现更好</li>
+</ul>
+<h3 id="mini-batch-gradient-descent-的运动状态中的矛盾"><a href="#mini-batch-gradient-descent-的运动状态中的矛盾" class="headerlink" title="mini-batch gradient descent 的运动状态中的矛盾"></a>mini-batch gradient descent 的运动状态中的矛盾</h3><h3 id="加权平均如何能解决这种运动矛盾"><a href="#加权平均如何能解决这种运动矛盾" class="headerlink" title="加权平均如何能解决这种运动矛盾"></a>加权平均如何能解决这种运动矛盾</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/J2625o3o5DZobCyFzfzYZaMn2Lws8vOxUyyH5SqO9rI!/r/dG0BAAAAAAAA" alt=""></p>
+<h3 id="momentum-代码逻辑"><a href="#momentum-代码逻辑" class="headerlink" title="momentum 代码逻辑"></a>momentum 代码逻辑</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/2u1Xz.scXW9S.efommtoCO.SYquVsDDcXyPew5M188s!/r/dDwBAAAAAAAA" alt=""></p>
+<h2 id="RMSProp"><a href="#RMSProp" class="headerlink" title="RMSProp"></a>RMSProp</h2><!--root mean squre Prop-->
+<h3 id="与Momentum相似点"><a href="#与Momentum相似点" class="headerlink" title="与Momentum相似点"></a>与Momentum相似点</h3><ul>
+<li>应对相似gradient descent 运动形态，纵轴波动大方向相反，横轴方向一致</li>
+<li>都用指数权重平均值算法</li>
+</ul>
+<h3 id="差异点"><a href="#差异点" class="headerlink" title="差异点"></a>差异点</h3><ul>
+<li>Momentum 只单纯用指数权重平均值来更新参数</li>
+<li>RMSProp用指数权重平均值的sqrt来更新参数</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/0eWVjfGB3KegAcoN9LlheAQ7maall2pn5FyB0VVXmKA!/r/dD0BAAAAAAAA" alt=""></p>
+<h3 id="希望如何变现实"><a href="#希望如何变现实" class="headerlink" title="希望如何变现实"></a>希望如何变现实</h3><ul>
+<li>要实现gradient descent 形态改进为绿线，我们希望$dw^2$ 变小， $db^2$ 变大</li>
+<li>为什么能如愿？<ul>
+<li>mini-batch gradient descent 蓝线特征是现实常规</li>
+<li>损失函数，约定要想尽一切办法尽快降低损失值，逼近最小值，这是事先设定的</li>
+<li>Momentum and RMSProp是帮助损失函数克服蓝线的现实，尽快实现目的</li>
+<li>通过RMSProp的公式设定，在反向传播backprop中，会倒逼$dw^2$ 变小， $db^2$ 变大</li>
+</ul>
+</li>
+</ul>
+<h2 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h2><!--Adaptive moment estimation-->
+<h3 id="核心优势"><a href="#核心优势" class="headerlink" title="核心优势"></a>核心优势</h3><h3 id="公式解析"><a href="#公式解析" class="headerlink" title="公式解析"></a>公式解析</h3><h3 id="可调参数"><a href="#可调参数" class="headerlink" title="可调参数"></a>可调参数</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/SujRNGROa1ghush8sR55d47jTgK3ZDfzLmIGSqOA2Ic!/r/dDwBAAAAAAAA" alt=""></p>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/X0184mbYQTfv2dnuMrEuMoEOVcW2bOwMQ5KYIn45bRo!/r/dD0BAAAAAAAA" alt=""></p>
+<h2 id="学习率衰减"><a href="#学习率衰减" class="headerlink" title="学习率衰减"></a>学习率衰减</h2><!--Learning rate decay-->
+<h3 id="效用"><a href="#效用" class="headerlink" title="效用"></a>效用</h3><ul>
+<li>逐步削减<code>learning rate</code>来实现加速学习</li>
+</ul>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><ul>
+<li>mini-batch: 64, 128, 波动性大</li>
+<li>固定learning_rate<ul>
+<li>如果一开始设定较大， 前期速度快，后期难逼近最小值；</li>
+<li>如果一开始设定较小，最终能逼近最小值，但速度太慢；</li>
+</ul>
+</li>
+<li>对learning_rate的希望：一开始快，然后逐步削减</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/vKqlNcn0GnyS2xc*NniJ8cyrIfZJI1YklivK*M*.6x4!/r/dDwBAAAAAAAA" alt=""></p>
+<h3 id="代码逻辑"><a href="#代码逻辑" class="headerlink" title="代码逻辑"></a>代码逻辑</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/jw4V82q20WhY5BeTRRi21VJlbdYIMiBJ9J0hgAjGyck!/r/dD0BAAAAAAAA" alt=""></p>
+<h3 id="其他学习率消减的方法"><a href="#其他学习率消减的方法" class="headerlink" title="其他学习率消减的方法"></a>其他学习率消减的方法</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/SKG1MzrqmzXmXVwyXG5qI1nGUFX..gE9G0aNbrj05rk!/r/dD0BAAAAAAAA" alt=""></p>
+<h3 id="使用注意"><a href="#使用注意" class="headerlink" title="使用注意"></a>使用注意</h3><ul>
+<li>一级参数： <code>learning_rate</code>; 二级参数： <code>decay_rate</code></li>
+<li><code>hyperparameter tuning</code> 能帮助我们系统调试最优参数</li>
+</ul>
+<h2 id="局部最优的问题"><a href="#局部最优的问题" class="headerlink" title="局部最优的问题"></a>局部最优的问题</h2><!--problem of local optimal-->
+<h3 id="模型训练的目的"><a href="#模型训练的目的" class="headerlink" title="模型训练的目的"></a>模型训练的目的</h3><ul>
+<li>寻找最小损失值， $J_{min}$</li>
+</ul>
+<h3 id="如何从图形上理解-J-min"><a href="#如何从图形上理解-J-min" class="headerlink" title="如何从图形上理解$J_{min}$"></a>如何从图形上理解$J_{min}$</h3><ul>
+<li>$J, w_1$, $J, w_2$ 都形成U型函数图</li>
+<li>合在一起，形成类似碗形的图</li>
+<li>optimal 就是碗的最低点， J的最小值</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/qunHso8vzke2Gp2s2skcvvonERY.INN5DmynqJdqHnI!/r/dG0BAAAAAAAA" alt=""></p>
+<h3 id="local-optimal痛苦之处"><a href="#local-optimal痛苦之处" class="headerlink" title="local optimal痛苦之处"></a>local optimal痛苦之处</h3><ul>
+<li>$J, w_1, w_2$创造了不止一个碗, 有无数中高位置的碗<code>local optimal</code></li>
+<li>当训练进入这些碗后，在他们的最低点，损失值会变0， 训练停止</li>
+<li>我们要的是最深最低的一个碗的最低点 <code>global optimal</code></li>
+</ul>
+<h3 id="从local-optimal到saddle-point"><a href="#从local-optimal到saddle-point" class="headerlink" title="从local optimal到saddle point"></a>从local optimal到saddle point</h3><ul>
+<li>local optimal 是浅层模型特有的，双U型或碗形概率25%，不低；但对深层模型，概率$10^{-20000}$</li>
+<li>saddle point 是U型和倒U型结合，概率就高很多很多，非常常见</li>
+<li>saddle point 带来的问题，不是slope=0, 停止训练；而是有些地方训练很慢很慢</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/qunHso8vzke2Gp2s2skcvvonERY.INN5DmynqJdqHnI!/r/dG0BAAAAAAAA" alt=""></p>
+<h3 id="优化算法的角色"><a href="#优化算法的角色" class="headerlink" title="优化算法的角色"></a>优化算法的角色</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/dUDarkLImE07S4EnXOGRJmNOyk8UDPFuF5ruRGH.zHw!/r/dG0BAAAAAAAA" alt=""></p>
+<h1 id="第三周-超参数调试、Batch正则化和程序框架"><a href="#第三周-超参数调试、Batch正则化和程序框架" class="headerlink" title="第三周 超参数调试、Batch正则化和程序框架"></a>第三周 超参数调试、Batch正则化和程序框架</h1><!--Hyperparameter tuning, Batch Normalization and Programming Frameworks-->
+<h2 id="调试处理"><a href="#调试处理" class="headerlink" title="调试处理"></a>调试处理</h2><!--Tuning process-->
+<h3 id="超参数的优先度分级"><a href="#超参数的优先度分级" class="headerlink" title="超参数的优先度分级"></a>超参数的优先度分级</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/zTSKdkXUvldCWMgOry3Y0QstqMd.gitZmTkN.AMDYmY!/r/dD0BAAAAAAAA" alt=""></p>
+<h3 id="超参数组选取方法"><a href="#超参数组选取方法" class="headerlink" title="超参数组选取方法"></a>超参数组选取方法</h3><ul>
+<li>用随机，不用固定模式组合</li>
+<li>聚焦再搜索</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/Wcfm7AZzeb8Ap2DlUE8DIz.C6VcI0TFyyW03KE77sns!/r/dD0BAAAAAAAA" alt=""></p>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/PXVyBBr1C*hX5d2zpP5226Sm4sKflHBQ5Yo64NtkuD4!/r/dDwBAAAAAAAA" alt=""></p>
+<h2 id="选择合适的尺度scale来调试超参数"><a href="#选择合适的尺度scale来调试超参数" class="headerlink" title="选择合适的尺度scale来调试超参数"></a>选择合适的尺度scale来调试超参数</h2><h3 id="uniform-random随机选择的情况"><a href="#uniform-random随机选择的情况" class="headerlink" title="uniform random随机选择的情况"></a>uniform random随机选择的情况</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/Nq49dPVCg1IDSKsDCf7PJ0rKkm4i8OLkelBMNsMs7S8!/r/dGwBAAAAAAAA" alt=""></p>
+<h3 id="log-scale-随机选择"><a href="#log-scale-随机选择" class="headerlink" title="log scale 随机选择"></a>log scale 随机选择</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/uj*hD4RWocSUn7CWFK9K8pA31oqgO1DQ7MLqNMitQ0M!/r/dD0BAAAAAAAA" alt=""></p>
+<h3 id="权重平均值为例"><a href="#权重平均值为例" class="headerlink" title="权重平均值为例"></a>权重平均值为例</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/fzIMZCykAOCr3fmFHClskHBSB5QUgAtioXYB1Q4Eh2M!/r/dDwBAAAAAAAA" alt=""></p>
+<h2 id="超参数训练实战经验"><a href="#超参数训练实战经验" class="headerlink" title="超参数训练实战经验"></a>超参数训练实战经验</h2><h3 id="不同领域模型的经验与参数借鉴度"><a href="#不同领域模型的经验与参数借鉴度" class="headerlink" title="不同领域模型的经验与参数借鉴度"></a>不同领域模型的经验与参数借鉴度</h3><ul>
+<li>思路，经验，技巧在不同领域可借鉴</li>
+<li>最佳参数值，通常无法借用</li>
+<li>同一个模型领域，一两个月，需要重新训练验证最优参数值是否发生变化</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/37f*u3QJ686BViGR.T9QiZNwKfs0PmuHFFUxOXxlb3c!/r/dDwBAAAAAAAA" alt=""></p>
+<h3 id="常见超参数验证（训练）方法"><a href="#常见超参数验证（训练）方法" class="headerlink" title="常见超参数验证（训练）方法"></a>常见超参数验证（训练）方法</h3><ul>
+<li>熊猫： 专注训练一个模型，实时关注，根据需要调整超参数，不断优化<ul>
+<li>适用人群：数据量大，计算能力有限</li>
+<li><!--调试哪些超参数不会让模型本质发生变化？--></li>
+<li>至少learning_rate $\alpha$, momentum $\beta$ , Ng提及可以自由调试</li>
+</ul>
+</li>
+<li>鱼卵：同时训练多个模型（不同超参数提前设定好），最后对比，找到最优超参数值<ul>
+<li>适用人群： 计算能力特别强大</li>
+<li>多个模型的区别：<ul>
+<li>超参数的区别（相同模型，不同超参数）</li>
+<li>模型本质区别（不同模型，不同超参数）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/iqkJZljMhUfrT4y.wSdou277Ug4Enn5UQvBax7MQTF4!/r/dG4BAAAAAAAA" alt=""></p>
+<h2 id="batch-normalization"><a href="#batch-normalization" class="headerlink" title="batch normalization"></a>batch normalization</h2><h3 id="效用-1"><a href="#效用-1" class="headerlink" title="效用"></a>效用</h3><ul>
+<li>帮助简单高效稳定地寻找最优超参数值</li>
+<li>让超参数在更大的区间，有效服务你的模型</li>
+<li>让更深更大的模型训练起来更容易</li>
+</ul>
+<h3 id="Batch-Norm实际工作"><a href="#Batch-Norm实际工作" class="headerlink" title="Batch Norm实际工作"></a>Batch Norm实际工作</h3><ul>
+<li>广泛的输入值标准化<ul>
+<li>对输入层做平均值，方差处理</li>
+<li>对隐藏层做相同处理</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/cSx*M41iRzQDoRxL69pOyVR04PlysCAnh7Wjl7iPIwI!/r/dIUBAAAAAAAA" alt=""></p>
+<h3 id="Batch-Norm-代码逻辑"><a href="#Batch-Norm-代码逻辑" class="headerlink" title="Batch Norm 代码逻辑"></a>Batch Norm 代码逻辑</h3><ul>
+<li>建议对$z$而不是 $a$ 做处理</li>
+<li>通过 $\gamma$ 和 $beta$ 来控制 $z$ 的平均值和方差，从而控制 $z$ 的变化范围</li>
+<li><!--疑问--> 学习算法，gradient descents 也会对$\gamma, \beta$<br>进行更新吗？还是它们完全有人来设定？</li>
+</ul>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/KqpLrxD9Supa32*za4HieAsaW4KQCoshcJtmqyGZ5rg!/r/dDwBAAAAAAAA" alt=""></p>
+<h2 id="batch-norm-应用于神经网络模型"><a href="#batch-norm-应用于神经网络模型" class="headerlink" title="batch norm 应用于神经网络模型"></a>batch norm 应用于神经网络模型</h2><!--fitting batch norm in a neural network-->
+<h3 id="gamma-beta-可训练更新参数"><a href="#gamma-beta-可训练更新参数" class="headerlink" title="$\gamma, \beta$ 可训练更新参数"></a>$\gamma, \beta$ 可训练更新参数</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/uOSPstc.NY1evohCiQHl4ctsK4JJL2IWsnAJYEY0IUA!/r/dOcAAAAAAAAA" alt=""></p>
+<h3 id="b-可忽略"><a href="#b-可忽略" class="headerlink" title="$b$ 可忽略"></a>$b$ 可忽略</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/Iwl5kYovJ5phnAhcGmFcvkEHDJkCS9pwb1JdijEgrw0!/r/dDwBAAAAAAAA" alt=""></p>
+<h3 id="gamma-beta-像-w-b-被优化算法更新"><a href="#gamma-beta-像-w-b-被优化算法更新" class="headerlink" title="$\gamma, \beta $ 像$w, b$ 被优化算法更新"></a>$\gamma, \beta $ 像$w, b$ 被优化算法更新</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/BLPlNhYLNG7fkpPTUQfqWHkLIgxE9gX1B7ueO5vaGCA!/r/dD0BAAAAAAAA" alt=""></p>
+<h2 id="batch-norm能加速学习的深层原因"><a href="#batch-norm能加速学习的深层原因" class="headerlink" title="batch norm能加速学习的深层原因"></a>batch norm能加速学习的深层原因</h2><!--why batch normalization work?-->
+<h3 id="Covariance-shift"><a href="#Covariance-shift" class="headerlink" title="Covariance shift"></a>Covariance shift</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/cKVc9OOLwBDdyNw9bOh*mksMQjPHPyeImlpG6ZRPviw!/r/dIUBAAAAAAAA" alt=""></p>
+<h3 id="batch-norm-克服-covariance-shift"><a href="#batch-norm-克服-covariance-shift" class="headerlink" title="batch norm 克服 covariance shift"></a>batch norm 克服 covariance shift</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/.cYFCrVdPKgHpCvsi2zSToNWMz6NjoU.IQXl7nv.ct0!/r/dIUBAAAAAAAA" alt=""></p>
+<h3 id="有限regularization"><a href="#有限regularization" class="headerlink" title="有限regularization"></a>有限regularization</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/hQ3hYDenBAC0XxkpiL5sxz9TKVajaKL64dGtcC*ePgk!/r/dDwBAAAAAAAA" alt=""></p>
+<h2 id="Batch-norm-at-test-time"><a href="#Batch-norm-at-test-time" class="headerlink" title="Batch norm at test time"></a>Batch norm at test time</h2><h3 id="预测时没有mini-batch的使用，如何求均值与方差？"><a href="#预测时没有mini-batch的使用，如何求均值与方差？" class="headerlink" title="预测时没有mini-batch的使用，如何求均值与方差？"></a>预测时没有mini-batch的使用，如何求均值与方差？</h3><p>在训练中，对所有层的均值方差的不同样本下的值，做指数加权平均，最后的均值和方差，用在test的模型里来计算batch norm. </p>
+<p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/GO8XEa2g2aVGY7LyCIGYTd9gzxA8sa7EOW1zt22*Ymg!/r/dGwBAAAAAAAA" alt=""></p>
+<h1 id="多类别分类"><a href="#多类别分类" class="headerlink" title="多类别分类"></a>多类别分类</h1><h2 id="softmax-regression"><a href="#softmax-regression" class="headerlink" title="softmax regression"></a>softmax regression</h2><h3 id="理解softmax"><a href="#理解softmax" class="headerlink" title="理解softmax"></a>理解softmax</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/3kKXMVqs0G5z2K3cu5uF981GgCTnfb22z651D96p9dE!/r/dG0BAAAAAAAA" alt=""></p>
+<h3 id="浅层线性分类模型图"><a href="#浅层线性分类模型图" class="headerlink" title="浅层线性分类模型图"></a>浅层线性分类模型图</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/G7jx24gqB.ZH8vHKnDm1Qla6y9Ifa7BqS3ZnpPHfIAM!/r/dDwBAAAAAAAA" alt=""></p>
+<h2 id="训练一个softmax分类模型"><a href="#训练一个softmax分类模型" class="headerlink" title="训练一个softmax分类模型"></a>训练一个softmax分类模型</h2><h3 id="进一步理解softmax"><a href="#进一步理解softmax" class="headerlink" title="进一步理解softmax"></a>进一步理解softmax</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/Vw7KIThNcZ0Pfzeld3k6mFlkuFFDl8OkkSdbUZDvb.4!/r/dD0BAAAAAAAA" alt=""></p>
+<h3 id="基于softmax的损失函数"><a href="#基于softmax的损失函数" class="headerlink" title="基于softmax的损失函数"></a>基于softmax的损失函数</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/iieHwQpqvP3Bma6WCfa0gWnygeo85Kc*LxAkyhnzKIA!/r/dDwBAAAAAAAA" alt=""></p>
+<h3 id="softmax分类的反向传播"><a href="#softmax分类的反向传播" class="headerlink" title="softmax分类的反向传播"></a>softmax分类的反向传播</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/nDh9MEgb3MeqZd0Bv*yFvLAdZzxaVWhRvlwpBGAqElA!/r/dIUBAAAAAAAA" alt=""></p>
+<h1 id="介绍深度学习库"><a href="#介绍深度学习库" class="headerlink" title="介绍深度学习库"></a>介绍深度学习库</h1><h2 id="如何选择深度学习库"><a href="#如何选择深度学习库" class="headerlink" title="如何选择深度学习库"></a>如何选择深度学习库</h2><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/PbQcBYbIeOGflB1l0Tci42Dv.IlRl7oYo55St8VvqHU!/r/dOcAAAAAAAAA" alt=""></p>
+<h2 id="如何使用tensorflow"><a href="#如何使用tensorflow" class="headerlink" title="如何使用tensorflow"></a>如何使用tensorflow</h2><h3 id="求解损失函数的最小值对应的w"><a href="#求解损失函数的最小值对应的w" class="headerlink" title="求解损失函数的最小值对应的w"></a>求解损失函数的最小值对应的w</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/2xTnL.CBoIU6sNVjxYP*CJt.xk72nrNPhcSgC36OUsM!/r/dIUBAAAAAAAA" alt=""></p>
+<h3 id="如何带入数据"><a href="#如何带入数据" class="headerlink" title="如何带入数据"></a>如何带入数据</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/njwzcwkmgt4qFG7n8W7gcRZ9MAsEki4F.qxjVHz.fp4!/r/dIUBAAAAAAAA" alt=""></p>
+<h3 id="反向自动化"><a href="#反向自动化" class="headerlink" title="反向自动化"></a>反向自动化</h3><p><img src="http://r.photo.store.qq.com/psb?/V119hAgO09pOsG/yIpCvatK0TPaS3Jct72LE5iBAZdQBBH55a8npfT1zfY!/r/dIUBAAAAAAAA" alt=""></p>
+<hr>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/05/最大似然估计(MLE)和最大后验估计(MAP)/" rel="next" title="最大似然估计(MLE)和最大后验估计(MAP)">
+                <i class="fa fa-chevron-left"></i> 最大似然估计(MLE)和最大后验估计(MAP)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="曹越" />
+            
+              <p class="site-author-name" itemprop="name">曹越</p>
+              <p class="site-description motion-element" itemprop="description">曹越的小天地</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/happycaoyue" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/imupkucaoyue" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-globe"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.weibo.com/imupkucaoyue" target="_blank" title="Weibo">
+                    
+                      <i class="fa fa-fw fa-globe"></i>Weibo</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://wycheng.me" title="南大校草王雨城个人技术博客" target="_blank">南大校草王雨城个人技术博客</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://plushunter.github.io" title="人大应用统计硕士技术博客" target="_blank">人大应用统计硕士技术博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#吴恩达深度学习课程2：实战中的问题"><span class="nav-number">1.</span> <span class="nav-text">吴恩达深度学习课程2：实战中的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#学习目标"><span class="nav-number">1.1.</span> <span class="nav-text">学习目标</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Week1"><span class="nav-number">2.</span> <span class="nav-text">Week1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#构建你的机器学习应用"><span class="nav-number">3.</span> <span class="nav-text">构建你的机器学习应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#理解Train-Dev-Test-sets"><span class="nav-number">3.1.</span> <span class="nav-text">理解Train | Dev | Test sets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bias-与-Variance的关系"><span class="nav-number">3.2.</span> <span class="nav-text">==Bias 与 Variance的关系==</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主要规律与噪音的博弈度量"><span class="nav-number">3.2.1.</span> <span class="nav-text">主要规律与噪音的博弈度量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#猫狗识别中的bias-variance-bayes-error"><span class="nav-number">3.2.2.</span> <span class="nav-text">猫狗识别中的bias, variance, bayes error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特例-high-bias-amp-varance"><span class="nav-number">3.2.3.</span> <span class="nav-text">特例 high bias & varance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何突破Bias-Variance困境"><span class="nav-number">3.3.</span> <span class="nav-text">==如何突破Bias-Variance困境==</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#降低high-bias"><span class="nav-number">3.3.1.</span> <span class="nav-text">降低high bias</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#再降低high-variance"><span class="nav-number">3.3.2.</span> <span class="nav-text">再降低high variance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深度学习的独特优势"><span class="nav-number">3.3.3.</span> <span class="nav-text">深度学习的独特优势</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#规范你的神经网络"><span class="nav-number">4.</span> <span class="nav-text">规范你的神经网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#何时用regularization正则化"><span class="nav-number">4.1.</span> <span class="nav-text">何时用regularization正则化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#L2-L1-正则化如何降噪"><span class="nav-number">4.1.1.</span> <span class="nav-text">L2, L1 正则化如何降噪</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L2-L1-在神经网络的用法"><span class="nav-number">4.1.2.</span> <span class="nav-text">L2, L1 在神经网络的用法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何理解-L2降低overfitting-or-high-variance"><span class="nav-number">4.2.</span> <span class="nav-text">如何理解 L2降低overfitting or high variance?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#L2克服overfitting理解1：压缩模型，控制偏执"><span class="nav-number">4.2.1.</span> <span class="nav-text">L2克服overfitting理解1：压缩模型，控制偏执</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L2克服overfitting理解2：从非线性模型-转化为-线性模型，实现弱化模型学习能力"><span class="nav-number">4.2.2.</span> <span class="nav-text">L2克服overfitting理解2：从非线性模型 转化为 线性模型，实现弱化模型学习能力</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dropout抛弃神经元的正则化"><span class="nav-number">4.3.</span> <span class="nav-text">dropout抛弃神经元的正则化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dropout如何降低high-variance"><span class="nav-number">4.3.1.</span> <span class="nav-text">dropout如何降低high variance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inverted-dropout-代码逻辑"><span class="nav-number">4.3.2.</span> <span class="nav-text">Inverted dropout 代码逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预测不做-dropout-处理"><span class="nav-number">4.3.3.</span> <span class="nav-text">预测不做 dropout 处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#理解dropout克服overfitting"><span class="nav-number">4.4.</span> <span class="nav-text">理解dropout克服overfitting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他降低overfitting或underfitting的办法？"><span class="nav-number">4.5.</span> <span class="nav-text">其他降低overfitting或underfitting的办法？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用data-augmentation增加fake-data扩大数据量"><span class="nav-number">4.5.1.</span> <span class="nav-text">用data augmentation增加fake data扩大数据量</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#定义你的优化问题"><span class="nav-number">5.</span> <span class="nav-text">定义你的优化问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何标准化输入值？"><span class="nav-number">5.1.</span> <span class="nav-text">如何标准化输入值？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#意义：-加速训练"><span class="nav-number">5.1.1.</span> <span class="nav-text">意义： 加速训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实质：规范均值和区间"><span class="nav-number">5.1.2.</span> <span class="nav-text">实质：规范均值和区间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标准化加速训练的实质"><span class="nav-number">5.1.3.</span> <span class="nav-text">标准化加速训练的实质</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#梯度消失和梯度爆炸"><span class="nav-number">5.2.</span> <span class="nav-text">梯度消失和梯度爆炸</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实质：初始参数的设定问题"><span class="nav-number">5.2.1.</span> <span class="nav-text">实质：初始参数的设定问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型参数初始化"><span class="nav-number">5.3.</span> <span class="nav-text">模型参数初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型初始参数控制在1附近"><span class="nav-number">5.3.1.</span> <span class="nav-text">模型初始参数控制在1附近</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#寻找W和n之间的关系函数"><span class="nav-number">5.3.2.</span> <span class="nav-text">寻找W和n之间的关系函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gradient-checking导数验证"><span class="nav-number">5.4.</span> <span class="nav-text">gradient checking导数验证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#验证backprop"><span class="nav-number">5.4.1.</span> <span class="nav-text">验证backprop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算精度高但费时"><span class="nav-number">5.4.2.</span> <span class="nav-text">计算精度高但费时</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型训练中做gradient-checking"><span class="nav-number">5.5.</span> <span class="nav-text">模型训练中做gradient checking</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#why-寻找模型backprop中的错误"><span class="nav-number">5.5.1.</span> <span class="nav-text">why - 寻找模型backprop中的错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将所有的parameters排成一列"><span class="nav-number">5.5.2.</span> <span class="nav-text">将所有的parameters排成一列</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradient-Checking细节问题"><span class="nav-number">5.6.</span> <span class="nav-text">Gradient Checking细节问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二周-优化算法"><span class="nav-number">6.</span> <span class="nav-text">第二周 优化算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">6.1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mini-batch-gradient-descent"><span class="nav-number">6.2.</span> <span class="nav-text">mini-batch gradient descent</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#意义"><span class="nav-number">6.2.1.</span> <span class="nav-text">意义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Batch-vs-Stochastic-vs-Mini-batch-gradient-descent"><span class="nav-number">6.2.2.</span> <span class="nav-text">Batch vs Stochastic vs Mini-batch gradient descent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#符号"><span class="nav-number">6.2.3.</span> <span class="nav-text">符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mini-batch-gradient-descent-执行代码"><span class="nav-number">6.2.4.</span> <span class="nav-text">mini-batch gradient descent 执行代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Understanding-mini-batch-gradient-descent"><span class="nav-number">6.3.</span> <span class="nav-text">Understanding mini-batch gradient descent</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#损失图对比"><span class="nav-number">6.3.1.</span> <span class="nav-text">损失图对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Batch-vs-Stochastic-vs-mini-batch-损失值图比较"><span class="nav-number">6.3.2.</span> <span class="nav-text">Batch vs Stochastic vs mini-batch 损失值图比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何选择mini-batch-size"><span class="nav-number">6.3.3.</span> <span class="nav-text">如何选择mini_batch_size ?</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exponentially-Weighted-Averages"><span class="nav-number">6.4.</span> <span class="nav-text">Exponentially Weighted Averages</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#意义-1"><span class="nav-number">6.4.1.</span> <span class="nav-text">意义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#伦敦10日气温均线"><span class="nav-number">6.4.2.</span> <span class="nav-text">伦敦10日气温均线</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Understanding-Exponential-Weighted-Average"><span class="nav-number">6.5.</span> <span class="nav-text">Understanding Exponential Weighted Average</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Exponential是如何而来？"><span class="nav-number">6.5.1.</span> <span class="nav-text">Exponential是如何而来？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#天数周期计算公式是怎么来的"><span class="nav-number">6.5.2.</span> <span class="nav-text">天数周期计算公式是怎么来的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么选用Exponential-Weighted-Average-求移动均线值"><span class="nav-number">6.5.3.</span> <span class="nav-text">为什么选用Exponential Weighted Average 求移动均线值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bias-Correction-in-Exponential-Weighted-Average"><span class="nav-number">6.6.</span> <span class="nav-text">Bias Correction in Exponential Weighted Average</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#存在价值"><span class="nav-number">6.6.1.</span> <span class="nav-text">存在价值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bias-Correct-不是必须"><span class="nav-number">6.6.2.</span> <span class="nav-text">Bias Correct 不是必须</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradient-Descent-with-Momentum"><span class="nav-number">6.7.</span> <span class="nav-text">Gradient Descent with Momentum</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一句话"><span class="nav-number">6.7.1.</span> <span class="nav-text">一句话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mini-batch-gradient-descent-的运动状态中的矛盾"><span class="nav-number">6.7.2.</span> <span class="nav-text">mini-batch gradient descent 的运动状态中的矛盾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加权平均如何能解决这种运动矛盾"><span class="nav-number">6.7.3.</span> <span class="nav-text">加权平均如何能解决这种运动矛盾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#momentum-代码逻辑"><span class="nav-number">6.7.4.</span> <span class="nav-text">momentum 代码逻辑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RMSProp"><span class="nav-number">6.8.</span> <span class="nav-text">RMSProp</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#与Momentum相似点"><span class="nav-number">6.8.1.</span> <span class="nav-text">与Momentum相似点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#差异点"><span class="nav-number">6.8.2.</span> <span class="nav-text">差异点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#希望如何变现实"><span class="nav-number">6.8.3.</span> <span class="nav-text">希望如何变现实</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adam"><span class="nav-number">6.9.</span> <span class="nav-text">Adam</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#核心优势"><span class="nav-number">6.9.1.</span> <span class="nav-text">核心优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#公式解析"><span class="nav-number">6.9.2.</span> <span class="nav-text">公式解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可调参数"><span class="nav-number">6.9.3.</span> <span class="nav-text">可调参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#学习率衰减"><span class="nav-number">6.10.</span> <span class="nav-text">学习率衰减</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#效用"><span class="nav-number">6.10.1.</span> <span class="nav-text">效用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">6.10.2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码逻辑"><span class="nav-number">6.10.3.</span> <span class="nav-text">代码逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他学习率消减的方法"><span class="nav-number">6.10.4.</span> <span class="nav-text">其他学习率消减的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用注意"><span class="nav-number">6.10.5.</span> <span class="nav-text">使用注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#局部最优的问题"><span class="nav-number">6.11.</span> <span class="nav-text">局部最优的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型训练的目的"><span class="nav-number">6.11.1.</span> <span class="nav-text">模型训练的目的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何从图形上理解-J-min"><span class="nav-number">6.11.2.</span> <span class="nav-text">如何从图形上理解$J_{min}$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#local-optimal痛苦之处"><span class="nav-number">6.11.3.</span> <span class="nav-text">local optimal痛苦之处</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从local-optimal到saddle-point"><span class="nav-number">6.11.4.</span> <span class="nav-text">从local optimal到saddle point</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优化算法的角色"><span class="nav-number">6.11.5.</span> <span class="nav-text">优化算法的角色</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三周-超参数调试、Batch正则化和程序框架"><span class="nav-number">7.</span> <span class="nav-text">第三周 超参数调试、Batch正则化和程序框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#调试处理"><span class="nav-number">7.1.</span> <span class="nav-text">调试处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#超参数的优先度分级"><span class="nav-number">7.1.1.</span> <span class="nav-text">超参数的优先度分级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#超参数组选取方法"><span class="nav-number">7.1.2.</span> <span class="nav-text">超参数组选取方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择合适的尺度scale来调试超参数"><span class="nav-number">7.2.</span> <span class="nav-text">选择合适的尺度scale来调试超参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#uniform-random随机选择的情况"><span class="nav-number">7.2.1.</span> <span class="nav-text">uniform random随机选择的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#log-scale-随机选择"><span class="nav-number">7.2.2.</span> <span class="nav-text">log scale 随机选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#权重平均值为例"><span class="nav-number">7.2.3.</span> <span class="nav-text">权重平均值为例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#超参数训练实战经验"><span class="nav-number">7.3.</span> <span class="nav-text">超参数训练实战经验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不同领域模型的经验与参数借鉴度"><span class="nav-number">7.3.1.</span> <span class="nav-text">不同领域模型的经验与参数借鉴度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见超参数验证（训练）方法"><span class="nav-number">7.3.2.</span> <span class="nav-text">常见超参数验证（训练）方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#batch-normalization"><span class="nav-number">7.4.</span> <span class="nav-text">batch normalization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#效用-1"><span class="nav-number">7.4.1.</span> <span class="nav-text">效用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Batch-Norm实际工作"><span class="nav-number">7.4.2.</span> <span class="nav-text">Batch Norm实际工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Batch-Norm-代码逻辑"><span class="nav-number">7.4.3.</span> <span class="nav-text">Batch Norm 代码逻辑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#batch-norm-应用于神经网络模型"><span class="nav-number">7.5.</span> <span class="nav-text">batch norm 应用于神经网络模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gamma-beta-可训练更新参数"><span class="nav-number">7.5.1.</span> <span class="nav-text">$\gamma, \beta$ 可训练更新参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-可忽略"><span class="nav-number">7.5.2.</span> <span class="nav-text">$b$ 可忽略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gamma-beta-像-w-b-被优化算法更新"><span class="nav-number">7.5.3.</span> <span class="nav-text">$\gamma, \beta $ 像$w, b$ 被优化算法更新</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#batch-norm能加速学习的深层原因"><span class="nav-number">7.6.</span> <span class="nav-text">batch norm能加速学习的深层原因</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Covariance-shift"><span class="nav-number">7.6.1.</span> <span class="nav-text">Covariance shift</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#batch-norm-克服-covariance-shift"><span class="nav-number">7.6.2.</span> <span class="nav-text">batch norm 克服 covariance shift</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有限regularization"><span class="nav-number">7.6.3.</span> <span class="nav-text">有限regularization</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Batch-norm-at-test-time"><span class="nav-number">7.7.</span> <span class="nav-text">Batch norm at test time</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#预测时没有mini-batch的使用，如何求均值与方差？"><span class="nav-number">7.7.1.</span> <span class="nav-text">预测时没有mini-batch的使用，如何求均值与方差？</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多类别分类"><span class="nav-number">8.</span> <span class="nav-text">多类别分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#softmax-regression"><span class="nav-number">8.1.</span> <span class="nav-text">softmax regression</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#理解softmax"><span class="nav-number">8.1.1.</span> <span class="nav-text">理解softmax</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浅层线性分类模型图"><span class="nav-number">8.1.2.</span> <span class="nav-text">浅层线性分类模型图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#训练一个softmax分类模型"><span class="nav-number">8.2.</span> <span class="nav-text">训练一个softmax分类模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进一步理解softmax"><span class="nav-number">8.2.1.</span> <span class="nav-text">进一步理解softmax</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于softmax的损失函数"><span class="nav-number">8.2.2.</span> <span class="nav-text">基于softmax的损失函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#softmax分类的反向传播"><span class="nav-number">8.2.3.</span> <span class="nav-text">softmax分类的反向传播</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍深度学习库"><span class="nav-number">9.</span> <span class="nav-text">介绍深度学习库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何选择深度学习库"><span class="nav-number">9.1.</span> <span class="nav-text">如何选择深度学习库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用tensorflow"><span class="nav-number">9.2.</span> <span class="nav-text">如何使用tensorflow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#求解损失函数的最小值对应的w"><span class="nav-number">9.2.1.</span> <span class="nav-text">求解损失函数的最小值对应的w</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何带入数据"><span class="nav-number">9.2.2.</span> <span class="nav-text">如何带入数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反向自动化"><span class="nav-number">9.2.3.</span> <span class="nav-text">反向自动化</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曹越</span>
+<span id="busuanzi_container_site_pv">
+   <i class="fa fa-eye-"></i>本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+
+  <span id="busuanzi_container_site_uv">
+   <i class="fa fa-user-"></i>本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cyt2xVwFT';
+      var conf = 'a1bffb2be42605f5a43d6531f7dbf31c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("EbaweVDHiHrQymnk5wIzfHP1-gzGzoHsz", "12DUrd2KdWPF2TdD64eMkAXl");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
