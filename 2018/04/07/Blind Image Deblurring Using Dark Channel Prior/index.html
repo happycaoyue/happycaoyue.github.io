@@ -79,17 +79,21 @@
 
 
 
-<meta name="description" content="最大似然估计(MLE)和最大后验估计(MAP)频率学派 - Frequentist - Maximum Likelihood Estimation (MLE，最大似然估计) 贝叶斯学派 - Bayesian - Maximum A Posteriori (MAP，最大后验估计) 现代机器学习的终极问题都会转化为解目标函数的优化问题，MLE和MAP是生成这个函数的很基本的思想. 两大学派的争论抽象频">
+<meta name="description" content="使用暗通道先验的盲图像去模糊（Blind Image Deblurring Using Dark Channel Prior） 摘要 AbstractOur work is inspired by the interesting observation that the dark channel of blurred images is less sparse. dark channels (sm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="最大似然估计(MLE)和最大后验估计(MAP)">
-<meta property="og:url" content="http://yoursite.com/2018/04/05/最大似然估计(MLE)和最大后验估计(MAP)/index.html">
+<meta property="og:title" content="Blind Image Deblurring Using Dark Channel Prior">
+<meta property="og:url" content="http://yoursite.com/2018/04/07/Blind Image Deblurring Using Dark Channel Prior/index.html">
 <meta property="og:site_name" content="曹越的快乐小站">
-<meta property="og:description" content="最大似然估计(MLE)和最大后验估计(MAP)频率学派 - Frequentist - Maximum Likelihood Estimation (MLE，最大似然估计) 贝叶斯学派 - Bayesian - Maximum A Posteriori (MAP，最大后验估计) 现代机器学习的终极问题都会转化为解目标函数的优化问题，MLE和MAP是生成这个函数的很基本的思想. 两大学派的争论抽象频">
+<meta property="og:description" content="使用暗通道先验的盲图像去模糊（Blind Image Deblurring Using Dark Channel Prior） 摘要 AbstractOur work is inspired by the interesting observation that the dark channel of blurred images is less sparse. dark channels (sm">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-05T03:06:30.996Z">
+<meta property="og:image" content="http://ota4w56o8.bkt.clouddn.com/0152.png">
+<meta property="og:image" content="http://ota4w56o8.bkt.clouddn.com/0153.png">
+<meta property="og:image" content="http://ota4w56o8.bkt.clouddn.com/0154.PNG">
+<meta property="og:updated_time" content="2018-04-08T03:56:52.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="最大似然估计(MLE)和最大后验估计(MAP)">
-<meta name="twitter:description" content="最大似然估计(MLE)和最大后验估计(MAP)频率学派 - Frequentist - Maximum Likelihood Estimation (MLE，最大似然估计) 贝叶斯学派 - Bayesian - Maximum A Posteriori (MAP，最大后验估计) 现代机器学习的终极问题都会转化为解目标函数的优化问题，MLE和MAP是生成这个函数的很基本的思想. 两大学派的争论抽象频">
+<meta name="twitter:title" content="Blind Image Deblurring Using Dark Channel Prior">
+<meta name="twitter:description" content="使用暗通道先验的盲图像去模糊（Blind Image Deblurring Using Dark Channel Prior） 摘要 AbstractOur work is inspired by the interesting observation that the dark channel of blurred images is less sparse. dark channels (sm">
+<meta name="twitter:image" content="http://ota4w56o8.bkt.clouddn.com/0152.png">
 
 
 
@@ -119,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/05/最大似然估计(MLE)和最大后验估计(MAP)/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/04/07/Blind Image Deblurring Using Dark Channel Prior/"/>
 
 
 
 
 
-  <title>最大似然估计(MLE)和最大后验估计(MAP) | 曹越的快乐小站</title>
+  <title>Blind Image Deblurring Using Dark Channel Prior | 曹越的快乐小站</title>
   
 
 
@@ -232,7 +236,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/05/最大似然估计(MLE)和最大后验估计(MAP)/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/07/Blind Image Deblurring Using Dark Channel Prior/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="曹越">
@@ -249,7 +253,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">最大似然估计(MLE)和最大后验估计(MAP)</h1>
+          <h1 class="post-title" itemprop="name headline">Blind Image Deblurring Using Dark Channel Prior</h1>
         
 
         <div class="post-meta">
@@ -261,8 +265,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-05T11:06:44+08:00">
-                2018-04-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-07T15:06:44+08:00">
+                2018-04-07
               </time>
             
 
@@ -284,8 +288,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/知识小记/" itemprop="url" rel="index">
-                    <span itemprop="name">知识小记</span>
+                  <a href="/categories/Paper-Reading/" itemprop="url" rel="index">
+                    <span itemprop="name">Paper Reading</span>
                   </a>
                 </span>
 
@@ -303,8 +307,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2018/04/05/最大似然估计(MLE)和最大后验估计(MAP)/#SOHUCS" itemprop="discussionUrl">
-                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/04/05/最大似然估计(MLE)和最大后验估计(MAP)/" itemprop="commentsCount"></span>
+                <a href="/2018/04/07/Blind Image Deblurring Using Dark Channel Prior/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/04/07/Blind Image Deblurring Using Dark Channel Prior/" itemprop="commentsCount"></span>
                 </a>
               
             
@@ -312,7 +316,7 @@
 
           
           
-             <span id="/2018/04/05/最大似然估计(MLE)和最大后验估计(MAP)/" class="leancloud_visitors" data-flag-title="最大似然估计(MLE)和最大后验估计(MAP)">
+             <span id="/2018/04/07/Blind Image Deblurring Using Dark Channel Prior/" class="leancloud_visitors" data-flag-title="Blind Image Deblurring Using Dark Channel Prior">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -343,57 +347,77 @@
       
 
       
-        <h1 id="最大似然估计-MLE-和最大后验估计-MAP"><a href="#最大似然估计-MLE-和最大后验估计-MAP" class="headerlink" title="最大似然估计(MLE)和最大后验估计(MAP)"></a>最大似然估计(MLE)和最大后验估计(MAP)</h1><p>频率学派 - Frequentist - Maximum Likelihood Estimation (MLE，最大似然估计)</p>
-<p>贝叶斯学派 - Bayesian - Maximum A Posteriori (MAP，最大后验估计)</p>
-<p>现代机器学习的终极问题都会转化为解目标函数的优化问题，MLE和MAP是生成这个函数的很基本的思想.</p>
-<h1 id="两大学派的争论"><a href="#两大学派的争论" class="headerlink" title="两大学派的争论"></a>两大学派的争论</h1><h2 id="抽象"><a href="#抽象" class="headerlink" title="抽象"></a>抽象</h2><p>频率学派和贝叶斯学派对世界的认知有本质不同：频率学派认为世界是确定的，有一个本体，这个本体的真值是不变的，我们的目标就是要找到这个真值或真值所在的范围；而贝叶斯学派认为世界是不确定的，人们对世界先有一个预判，而后通过观测数据对这个预判做调整，我们的目标是要找到最优的描述这个世界的概率分布。</p>
-<h2 id="建模"><a href="#建模" class="headerlink" title="建模"></a>建模</h2><p>在对事物建模时，用$\theta$表示模型的参数，解决问题的本质就是求$\theta$那么</p>
-<h3 id="1-频率学派："><a href="#1-频率学派：" class="headerlink" title="(1) 频率学派："></a>(1) 频率学派：</h3><p>存在唯一真值$\theta$</p>
-<p>举一个简单直观的例子–抛硬币，我们用$P(head)$来表示硬币的bias。抛一枚硬币$100$次，有$20$次正面朝上，要估计抛硬币正面朝上的$bias$ $P(head)=\theta$ 。在频率学派来看，$\theta = \frac{20}{100} = 0.2$，很直观。当数据量趋于无穷时，这种方法能给出精准的估计；然而缺乏数据时则可能产生严重的偏差。例如，对于一枚均匀硬币，即 $\theta = 0.5$ 抛掷$5$次，出现5次正面 (这种情况出现的概率是$(\frac{1}{2})^5=3.125%$)，频率学派会直接估计这枚硬币$\theta = 1$出现严重错误。</p>
-<h3 id="2-贝叶斯学派："><a href="#2-贝叶斯学派：" class="headerlink" title="(2) 贝叶斯学派："></a>(2) 贝叶斯学派：</h3><p>$\theta$是一个随机变量，符合一定的概率分布</p>
-<p>在贝叶斯学派里有两大输入和一大输出，输入是先验 (prior)和似然 (likelihood)，输出是后验 (posterior)。先验，即 $P(\theta)$ ，指的是在没有观测到任何数据时对$\theta$的预先判断，例如给我一个硬币，一种可行的先验是认为这个硬币有很大的概率是均匀的，有较小的概率是是不均匀的；似然，即 $P(X|\theta)$ ，是假设 $\theta$ 已知后我们观察到的数据应该是什么样子的；后验，即 P(\theta|X) ，是最终的参数分布。贝叶斯估计的基础是贝叶斯公式，如下：</p>
-<p>$P(\theta|X)=\frac{P(X|\theta) \times P(\theta)}{P(X)} $</p>
-<p>同样是抛硬币的例子，对一枚均匀硬币抛$5$次得到$5$次正面，如果先验认为大概率下这个硬币是均匀的 (例如最大值取在0.5处的$Beta$分布)，那么 $P(head)$ ，即 $P(\theta|X)$ ，是一个$distribution$，最大值会介于0.5~1之间，而不是武断的 $\theta = 1$。</p>
-<p>这里有两点值得注意的地方：</p>
-<p>随着数据量的增加，参数分布会越来越向数据靠拢，先验的影响力会越来越小</p>
-<p>如果先验是$uniform$ $distribution$，则贝叶斯方法等价于频率方法。因为直观上来讲，先验是uniform distribution本质上表示对事物没有任何预判</p>
-<h1 id="MLE-最大似然估计"><a href="#MLE-最大似然估计" class="headerlink" title="MLE - 最大似然估计"></a>MLE - 最大似然估计</h1><p>$Maximum$ $Likelihood$ $Estimation$, $MLE$是频率学派常用的估计方法！</p>
-<p>假设数据 $x_1, x_2, …, x_n$  是$i.i.d.$的一组抽样，$X = (x_1, x_2, …, x_n)$其中$i.i.d.$表示Independent and identical distribution，独立同分布。那么$MLE$对 $\theta$ 的估计方法可以如下推导：</p>
-<p>$$\hat{\theta}_{MLE}=arg maxP(X;\theta)$$</p>
-<p>$$\hat{\theta}_{MLE}=arg max log^{P(X;\theta)}$$</p>
-<p>$$\hat{\theta}_{MLE}=arg max log^{\prod^{n}_{i=1} P(x_i;\theta)}$$</p>
-<p>$$\hat{\theta}_{MLE}=arg max \sum^{n}_{i=1}log^{ P(x_i;\theta)}$$</p>
-<p>$$\hat{\theta}_{MLE}=arg min -\sum^{n}_{i=1}log^{ P(x_i;\theta)}$$</p>
-<p>最后这一行所优化的函数被称为Negative Log Likelihood (NLL)，这个概念和上面的推导是非常重要的！</p>
-<p>我们经常在不经意间使用MLE，例如</p>
-<p>上文中关于频率学派求硬币概率的例子，其方法其实本质是由优化NLL得出。</p>
-<p>因为抛硬币可以表示为参数为$\theta$的$Bernoulli$分布，即</p>
-<p>$P(x_i; \theta) =\left\{ \begin{array}{ll} \theta &amp; x_i = 1 \ 1 - \theta &amp; x_i = 0 \ \end{array} \right.  = \theta^{x_i} (1- \theta)^{1-x_i} $</p>
-<p>其中$x_i = 1$表示第$i$次抛出正面。那么，</p>
-<p>$$\text{NLL} = -\sum_{i=1}^n \log P(x_i; \theta) = -\sum_{i=1}^n \log \theta^{x_i} (1- \theta)^{1-x_i}$$</p>
-<p>求导数并使其等于零，得到</p>
-<p>$$\text{NLL}’ = -\sum_{i=1}^n\Big(\frac{x_i}{\theta} + (1-x_i)\frac{-1}{1-\theta}\Big) = 0 $$</p>
-<p>即</p>
-<p>$$\hat{\theta} = \frac{\sum^{n}_{i=1} x_i}{n} $$</p>
-<p>也就是出现正面的次数除以总共的抛掷次数。</p>
-<p>给定一些数据，求对应的高斯分布时，我们经常会算这些数据点的均值和方差然后带入到高斯分布的公式，其理论依据是优化NLL</p>
-<p>深度学习做分类任务时所用的cross entropy loss，其本质也是MLE</p>
-<h1 id="MAP-最大后验估计"><a href="#MAP-最大后验估计" class="headerlink" title="$MAP$ - 最大后验估计"></a>$MAP$ - 最大后验估计</h1><p>$Maximum$ $A$ $Posteriori$, $MAP$是贝叶斯学派常用的估计方法！</p>
-<p>假设数据$x_1,x_2,……,x_n$是独立同分布($i.i.d$)的一组样本,$X=(x_1,x_2,……,x_n)$,那么MAP对$\theta$的估计方法如下推导</p>
-<p>$\hat{\theta}_{MAP}=arg maxP(\theta|X)$</p>
-<p>$=arg min- P(\theta|X)$</p>
-<p>$=arg min- log^{P(\theta|X)}$</p>
-<p>由贝叶斯公式可知</p>
-<p>$P(\theta|X)=\frac{P(X|\theta)×P(\theta)}{P(X)}$</p>
-<p>带入得：</p>
-<p>$=arg min- log^{P(X|\theta)} - log^{P(\theta)} + log^{P(X)}$</p>
-<p>$P(X)$可以丢掉因为与$\theta$无关</p>
-<p>$=arg min- log^{P(X|\theta)} - log^{P(\theta)}$</p>
-<p>注意 $-\log P(X|\theta )$其实就是NLL，所以MLE和MAP在优化时的不同就是在于先验项 $- \log P(\theta) $好的，那现在我们来研究一下这个先验项，假定先验是一个高斯分布，即</p>
-<p>$P(\theta) = \text{constant} \times e^{-\frac{\theta^2}{2\sigma^2}} $</p>
-<p>那么， $-\log P(\theta) = \text{constant} + \frac{\theta^2}{2\sigma^2} $</p>
-<p>在$MAP$中使用一个高斯分布的先验等价于在$MLE$中采用$L2$的$regularizaton$！</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://zhuanlan.zhihu.com/p/32480810" target="_blank" rel="external">聊一聊机器学习的MLE和MAP：最大似然估计和最大后验估计</a></p>
+        <p>使用暗通道先验的盲图像去模糊（Blind Image Deblurring Using Dark Channel Prior）</p>
+<h1 id="摘要-Abstract"><a href="#摘要-Abstract" class="headerlink" title="摘要 Abstract"></a>摘要 Abstract</h1><p>Our work is inspired by the interesting observation that the dark channel of blurred images is less sparse.</p>
+<p>dark channels (smallest values in a local neighborhood) of blurred images are less dark</p>
+<p>when a dark pixel is averaged with neighboring high-intensity pixels during the blur process, its intensity increases.</p>
+<p>This new term favors clean images over blurred images in the restoration process.</p>
+<p>Optimizing the new L0-regularized dark channel term is<br>challenging</p>
+<p>The $L_0$ norm is highly non-convex and the optimization involves a non-linear minimum operation.</p>
+<h1 id="dark-channel-prior"><a href="#dark-channel-prior" class="headerlink" title="dark channel prior"></a>dark channel prior</h1><h2 id="Dark-Channel"><a href="#Dark-Channel" class="headerlink" title="Dark Channel"></a>Dark Channel</h2><ul>
+<li>Dark channel [He et al., CVPR 2009]</li>
+</ul>
+<p align="center"><br>    <img src="http://ota4w56o8.bkt.clouddn.com/0152.png" width="60%"><br>    <br>    <small> N(x) denote a patch centered at pixel x  </small><br></p>
+
+<p align="center"><br>    <img src="http://ota4w56o8.bkt.clouddn.com/0153.png" width="60%"><br>    <br>    <small> Dark Channel-Compute the minimum intensity in a patch of an image  </small><br></p>
+
+<p>当图像$I$是彩色$RGB$图</p>
+<p>$$ D(I)(x)=\left.  min \right|_{y \in N(x)} (\left.  min \right|_{c \in r,g,b}I^c(y))$$</p>
+<p>$x$ $y$ 表示像素位置</p>
+<p>$N(x)$ 图像块以$x$为中心</p>
+<p>$I^c$图像$I$的$c$颜色通道</p>
+<p>针对与彩色图来说的暗通道就是指，这一个图像块中亮度最低的那个像素，且是每个像素三个通道最低的那个</p>
+<p>当图像$I$是灰色图</p>
+<p>$$ D(I)(x)=\left.  min \right|_{y \in N(x)} I(y)$$</p>
+<p>针对与灰色图来说的暗通道就是指，这一个图像块中亮度最低的那个像素</p>
+<h2 id="Convolution-Blur-Operation"><a href="#Convolution-Blur-Operation" class="headerlink" title="Convolution(Blur) Operation"></a>Convolution(Blur) Operation</h2><p>$$ B(x)=\sum_{z \in\Omega_k}I(x+[\frac{s}{2}]-z)k(z)$$ </p>
+<p>$\Omega_k$ 模糊核的领域 the domain of blur kernel</p>
+<p>$s$ 模糊核的尺寸 size of blur kernel</p>
+<p>$k$ 模糊核</p>
+<p>$[]$ 取整操作</p>
+<p>$$k(z) \ge 0$$ </p>
+<p>$$\sum_{z \in\Omega_k}k(z)=1$$ </p>
+<h3 id="Proposition-1"><a href="#Proposition-1" class="headerlink" title="Proposition 1:"></a>Proposition 1:</h3><p align="center"><br>    <img src="http://ota4w56o8.bkt.clouddn.com/0154.PNG" width="60%"><br>    <br>    <small>  </small><br></p>
+
+<p>$$ B(x) \ge \left.  min \right|_{y \in N(x)} I(y)$$</p>
+<h3 id="Property-1"><a href="#Property-1" class="headerlink" title="Property 1:"></a>Property 1:</h3><p>$$ D(B)(x) \ge D(I)(x)$$</p>
+<p>$D(B)$ denote the dark channel of the clear images</p>
+<p>$D(I)$ denote the dark channel of the blurred images</p>
+<h3 id="Property-2"><a href="#Property-2" class="headerlink" title="Property 2:"></a>Property 2:</h3><p>$Ω$ denote the domain of an image $I$</p>
+<p>If there exist some pixels $x ∈ Ω$ such that I(x) = 0, we have:</p>
+<p>$$ ||D(B)||_{0} &gt; ||D(I)||_{0}$$</p>
+<p>Blurred images have less sparse dark channels than clear images</p>
+<p>总结：模糊的图像含强度更低的、更稀疏的暗通道</p>
+<p>$$ \left.  min \right| _{I,k} ||I \otimes k-B||^{2}_{2}+\gamma||k||^{2}_{2}+\mu||\nabla I||_{0}+\lambda ||D(I)||_{0}$$</p>
+<p>L0 norm and non-linear min operator</p>
+<h1 id="Optimization"><a href="#Optimization" class="headerlink" title="Optimization"></a>Optimization</h1><ul>
+<li>Update latent image I:</li>
+</ul>
+<p>$$ \left.  min \right| _{I} ||I \otimes k-B||^{2}_{2}+\mu||\nabla I||_{0}+\lambda ||D(I)||_{0}$$</p>
+<ul>
+<li>Half-quadratic splitting 半二次方分裂</li>
+</ul>
+<p>$$ \left.  min \right| _{I,u,g} ||I \otimes k-B||^{2}_{2}+\alpha||\nabla I-g||^{2}_{2}+\beta||D(I)-u||^{2}_{2}+\mu||g||_{0}+\lambda ||u||_{0}$$</p>
+<ul>
+<li>Alternative minimization 交替最小化</li>
+</ul>
+<p>$$ \left.  min \right| _{I} ||I \otimes k-B||^{2}_{2}+\beta||D(I)-u||^{2}_{2}+\mu||g||_{0}$$</p>
+<p>$$ \left.  min \right| _{u,g} \alpha||\nabla I-g||^{2}_{2}+\beta||D(I)-u||^{2}_{2}+\mu||g||_{0}+\lambda ||u||_{0}$$</p>
+<ul>
+<li>u, g sub-problem 划分为子问题</li>
+</ul>
+<p>$$\begin{cases}<br>        \left.  min \right| _{u} \beta||D(I)-u||^{2}_{2}+\lambda ||u||_{0}\\<br>        &amp;&amp;&amp;&amp;\vdots\\<br>        \left.  min \right| _{g} \alpha||\nabla I-g||^{2}_{2}+\mu||g||_{0}<br>    \end{cases}$$</p>
+<p>$u$和$g$独立</p>
+<p>$$u=\begin{cases}<br>        D(I), &amp; |D(I)|^{2} \ge \frac{λ}{β}\ <br>        0, &amp; otherwise<br>    \end{cases}$$</p>
+<p>$$g=\begin{cases}<br>        \nabla I, &amp; |\nabla I|^{2} \ge \frac{μ}{α}\ <br>        0, &amp; otherwise<br>    \end{cases}$$</p>
+<ul>
+<li>I sub-problem 划分为子问题</li>
+</ul>
+<p>Our observation</p>
+<p>$D(I)=MI$</p>
+<p>$$ y=\left.  min \right|_{z \in N(x)} I(z)$$</p>
+<p>$$M(x,z)=\begin{cases}<br>        1, &amp; z=y\ <br>        0, &amp; otherwise<br>    \end{cases}$$</p>
+<h1 id="参考论文"><a href="#参考论文" class="headerlink" title="参考论文"></a>参考论文</h1><p>[1]Blind Image Deblurring Using Dark Channel Prior<br><a href="http://vllab1.ucmerced.edu/~jinshan/" target="_blank" rel="external">Pan Jinshan</a><br><a href="http://vllab1.ucmerced.edu/~jinshan/projects/" target="_blank" rel="external">Pan Jinshan Projects</a><br><a href="http://vllab1.ucmerced.edu/~jinshan/projects/dark-channel-deblur/" target="_blank" rel="external">Projects</a><br><a href="http://vllab1.ucmerced.edu/~jinshan/projects/dark-channel-deblur/dark-channel-deblur/cvpr16-dark-channel-deblur.pdf" target="_blank" rel="external">Paper</a><br><a href="http://vllab1.ucmerced.edu/~jinshan/projects/dark-channel-deblur/" target="_blank" rel="external">Project Web</a></p>
 
       
     </div>
@@ -418,8 +442,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/10/05-神经网络的训练/" rel="next" title="深度学习心得05| 神经网络的训练">
-                <i class="fa fa-chevron-left"></i> 深度学习心得05| 神经网络的训练
+              <a href="/2018/04/07/Learning Deep CNN Denoiser Prior for Image Restoration/" rel="next" title="Learning Deep CNN Denoiser Prior for Image Restoration">
+                <i class="fa fa-chevron-left"></i> Learning Deep CNN Denoiser Prior for Image Restoration
               </a>
             
           </div>
@@ -428,8 +452,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/06/norm and regularization/" rel="prev" title="范数与正则化">
-                范数与正则化 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/04/07/blind image deblurring/" rel="prev" title="盲图像去模糊（blind image deblurring）">
+                盲图像去模糊（blind image deblurring） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -602,7 +626,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#最大似然估计-MLE-和最大后验估计-MAP"><span class="nav-number">1.</span> <span class="nav-text">最大似然估计(MLE)和最大后验估计(MAP)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#两大学派的争论"><span class="nav-number">2.</span> <span class="nav-text">两大学派的争论</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象"><span class="nav-number">2.1.</span> <span class="nav-text">抽象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建模"><span class="nav-number">2.2.</span> <span class="nav-text">建模</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-频率学派："><span class="nav-number">2.2.1.</span> <span class="nav-text">(1) 频率学派：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-贝叶斯学派："><span class="nav-number">2.2.2.</span> <span class="nav-text">(2) 贝叶斯学派：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MLE-最大似然估计"><span class="nav-number">3.</span> <span class="nav-text">MLE - 最大似然估计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MAP-最大后验估计"><span class="nav-number">4.</span> <span class="nav-text">$MAP$ - 最大后验估计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要-Abstract"><span class="nav-number">1.</span> <span class="nav-text">摘要 Abstract</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dark-channel-prior"><span class="nav-number">2.</span> <span class="nav-text">dark channel prior</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dark-Channel"><span class="nav-number">2.1.</span> <span class="nav-text">Dark Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Convolution-Blur-Operation"><span class="nav-number">2.2.</span> <span class="nav-text">Convolution(Blur) Operation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Proposition-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">Proposition 1:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Property-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">Property 1:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Property-2"><span class="nav-number">2.2.3.</span> <span class="nav-text">Property 2:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Optimization"><span class="nav-number">3.</span> <span class="nav-text">Optimization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考论文"><span class="nav-number">4.</span> <span class="nav-text">参考论文</span></a></li></ol></div>
             
 
           </div>
