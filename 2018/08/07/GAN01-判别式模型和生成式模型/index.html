@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="范数与正则化范数是具有“长度”概念的函数。在向量空间内，为所有的向量的赋予非零的增长度或者大小。不同的范数，所求的向量的长度或者大小是不同的。 举个例子，2维空间中，向量(3,4)的长度是5，那么5就是这个向量的一个范数的值，更确切的说，是欧式范数或者L2范数的值。 向量范数$x=(x_1,x_2,……,x_N)$ $L_0$范数是指向量中非0的元素的个数。(L0范数很难优化求解)  $L_0$正">
+<meta name="description" content="generative adversarial network 对抗生成网络 机器学习基本知识生成式模型(generative models)与判别式模型(Discriminative models) 本质区别：生成式模型可以生成数据，而判别式模型不可以生成数据，只可以将数据用于分类、回归等问题 判别式模型(Discriminative models)Goal: given $x$, predict">
 <meta property="og:type" content="article">
-<meta property="og:title" content="范数与正则化">
-<meta property="og:url" content="http://yoursite.com/2018/04/06/norm and regularization/index.html">
+<meta property="og:title" content="GAN01| 判别式模型和生成式模型">
+<meta property="og:url" content="http://yoursite.com/2018/08/07/GAN01-判别式模型和生成式模型/index.html">
 <meta property="og:site_name" content="曹越的快乐小站">
-<meta property="og:description" content="范数与正则化范数是具有“长度”概念的函数。在向量空间内，为所有的向量的赋予非零的增长度或者大小。不同的范数，所求的向量的长度或者大小是不同的。 举个例子，2维空间中，向量(3,4)的长度是5，那么5就是这个向量的一个范数的值，更确切的说，是欧式范数或者L2范数的值。 向量范数$x=(x_1,x_2,……,x_N)$ $L_0$范数是指向量中非0的元素的个数。(L0范数很难优化求解)  $L_0$正">
+<meta property="og:description" content="generative adversarial network 对抗生成网络 机器学习基本知识生成式模型(generative models)与判别式模型(Discriminative models) 本质区别：生成式模型可以生成数据，而判别式模型不可以生成数据，只可以将数据用于分类、回归等问题 判别式模型(Discriminative models)Goal: given $x$, predict">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-08T03:57:45.096Z">
+<meta property="og:updated_time" content="2018-08-09T06:30:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="范数与正则化">
-<meta name="twitter:description" content="范数与正则化范数是具有“长度”概念的函数。在向量空间内，为所有的向量的赋予非零的增长度或者大小。不同的范数，所求的向量的长度或者大小是不同的。 举个例子，2维空间中，向量(3,4)的长度是5，那么5就是这个向量的一个范数的值，更确切的说，是欧式范数或者L2范数的值。 向量范数$x=(x_1,x_2,……,x_N)$ $L_0$范数是指向量中非0的元素的个数。(L0范数很难优化求解)  $L_0$正">
+<meta name="twitter:title" content="GAN01| 判别式模型和生成式模型">
+<meta name="twitter:description" content="generative adversarial network 对抗生成网络 机器学习基本知识生成式模型(generative models)与判别式模型(Discriminative models) 本质区别：生成式模型可以生成数据，而判别式模型不可以生成数据，只可以将数据用于分类、回归等问题 判别式模型(Discriminative models)Goal: given $x$, predict">
 
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/06/norm and regularization/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/08/07/GAN01-判别式模型和生成式模型/"/>
 
 
 
 
 
-  <title>范数与正则化 | 曹越的快乐小站</title>
+  <title>GAN01| 判别式模型和生成式模型 | 曹越的快乐小站</title>
   
 
 
@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/06/norm and regularization/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/07/GAN01-判别式模型和生成式模型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="曹越">
@@ -249,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">范数与正则化</h1>
+          <h1 class="post-title" itemprop="name headline">GAN01| 判别式模型和生成式模型</h1>
         
 
         <div class="post-meta">
@@ -261,8 +261,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-06T13:06:44+08:00">
-                2018-04-06
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-07T10:47:44+08:00">
+                2018-08-07
               </time>
             
 
@@ -284,8 +284,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/知识小记/" itemprop="url" rel="index">
-                    <span itemprop="name">知识小记</span>
+                  <a href="/categories/生成式对抗网络/" itemprop="url" rel="index">
+                    <span itemprop="name">生成式对抗网络</span>
                   </a>
                 </span>
 
@@ -303,8 +303,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2018/04/06/norm and regularization/#SOHUCS" itemprop="discussionUrl">
-                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/04/06/norm and regularization/" itemprop="commentsCount"></span>
+                <a href="/2018/08/07/GAN01-判别式模型和生成式模型/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/08/07/GAN01-判别式模型和生成式模型/" itemprop="commentsCount"></span>
                 </a>
               
             
@@ -312,7 +312,7 @@
 
           
           
-             <span id="/2018/04/06/norm and regularization/" class="leancloud_visitors" data-flag-title="范数与正则化">
+             <span id="/2018/08/07/GAN01-判别式模型和生成式模型/" class="leancloud_visitors" data-flag-title="GAN01| 判别式模型和生成式模型">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -343,73 +343,95 @@
       
 
       
-        <h1 id="范数与正则化"><a href="#范数与正则化" class="headerlink" title="范数与正则化"></a>范数与正则化</h1><p>范数是具有“长度”概念的函数。在向量空间内，为所有的向量的赋予非零的增长度或者大小。不同的范数，所求的向量的长度或者大小是不同的。</p>
-<p>举个例子，2维空间中，向量(3,4)的长度是5，那么5就是这个向量的一个范数的值，更确切的说，是欧式范数或者L2范数的值。</p>
-<h1 id="向量范数"><a href="#向量范数" class="headerlink" title="向量范数"></a>向量范数</h1><p>$x=(x_1,x_2,……,x_N)$</p>
-<h2 id="L-0-范数"><a href="#L-0-范数" class="headerlink" title="$L_0$范数"></a>$L_0$范数</h2><p>是指向量中非0的元素的个数。(L0范数很难优化求解) </p>
-<p>$L_0$正则化：</p>
-<p>$$\sum^{m}_{j=1 \theta_j \ne 0}\theta^0_j$$</p>
-<p>如果我们用$L_0$范数来规则化一个参数矩阵$W$的话，直观的说，就是希望$W$的大部分元素都是$0$。即让参数矩阵$W$是稀疏的。</p>
-<p>因为$L0$范数很难优化求解（NP难问题），$L1$范数是$L0$范数的最优凸近似，而且$L1$范数比$L0$范数要容易优化求解。所以大家选择$L1$范数。</p>
-<h2 id="1-范数-L-1-范数"><a href="#1-范数-L-1-范数" class="headerlink" title="$1$-范数/$L_1$范数"></a>$1$-范数/$L_1$范数</h2><p>$$||x||_{1}=\sum^{N}_{i=1}|x_i|$$</p>
-<p>$L_1$范数也叫“稀疏规则算子”（Lasso regularization）</p>
-<p>$L_1$范数是向量元素绝对值之和</p>
-<p>matlab调用函数norm(x, 1)</p>
+        <p>generative adversarial network 对抗生成网络</p>
+<h1 id="机器学习基本知识"><a href="#机器学习基本知识" class="headerlink" title="机器学习基本知识"></a>机器学习基本知识</h1><p>生成式模型(generative models)与判别式模型(Discriminative models)</p>
+<p>本质区别：生成式模型可以生成数据，而判别式模型不可以生成数据，只可以将数据用于分类、回归等问题</p>
+<h2 id="判别式模型-Discriminative-models"><a href="#判别式模型-Discriminative-models" class="headerlink" title="判别式模型(Discriminative models)"></a>判别式模型(Discriminative models)</h2><p>Goal: given $x$, predict $y$</p>
+<p>找到一个映射$x:\to y$ 即 $f(x)$</p>
+<p>分类问题 classfication $f(x) \in 0 or 1$</p>
+<p>回归问题 regression  $f(x) \in R$</p>
+<h3 id="1-概率模型-Probabilistic"><a href="#1-概率模型-Probabilistic" class="headerlink" title="(1) 概率模型 Probabilistic"></a>(1) 概率模型 Probabilistic</h3><p>Goal: given $x$, predict $y$</p>
+<p>求 $p(y | x)$</p>
+<p>如二分类</p>
+<p>$p(1 | x) \geq 0.5$ 输出 $1$</p>
+<p>$p(1 | x) &lt; 0.5$ 输出 $0$</p>
+<p>几种基于(条件)概率模型的判别式模型</p>
 <ul>
-<li>$L_1$范数可以进行特征选择，即让特征的系数变为$0$.</li>
+<li>Logistic regression</li>
 </ul>
-<p>$L_1$正则化：</p>
-<p>$$\sum^{m}_{j=1}|\theta_j|$$</p>
-<p>L1范数和L0范数可以实现稀疏，L1因具有比L0更好的优化求解特性而被广泛应用。</p>
-<h3 id="参数稀疏的好处"><a href="#参数稀疏的好处" class="headerlink" title="参数稀疏的好处"></a>参数稀疏的好处</h3><p>1）特征选择(Feature Selection)： </p>
-<p>大家对稀疏规则化趋之若鹜的一个关键原因在于它能实现特征的自动选择。一般来说，xi的大部分元素（也就是特征）都是和最终的输出yi没有关系或者不提供任何信息的，在最小化目标函数的时候考虑xi这些额外的特征，虽然可以获得更小的训练误差，但在预测新的样本时，这些没用的信息反而会被考虑，从而干扰了对正确yi的预测。稀疏规则化算子的引入就是为了完成特征自动选择的光荣使命，它会学习地去掉这些没有信息的特征，也就是把这些特征对应的权重置为0。</p>
-<p>2）可解释性(Interpretability)： </p>
-<p>另一个青睐于稀疏的理由是，模型更容易解释。例如患某种病的概率是y，然后我们收集到的数据x是1000维的，也就是我们需要寻找这1000种因素到底是怎么影响患上这种病的概率的。假设我们这个是个回归模型：y=w1<em>x1+w2</em>x2+…+w1000<em>x1000+b（当然了，为了让y限定在[0,1]的范围，一般还得加个Logistic函数）。通过学习，如果最后学习到的w</em>就只有很少的非零元素，例如只有5个非零的wi，那么我们就有理由相信，这些对应的特征在患病分析上面提供的信息是巨大的，决策性的。也就是说，患不患这种病只和这5个因素有关，那医生就好分析多了。</p>
-<h2 id="2-范数-L-2-范数"><a href="#2-范数-L-2-范数" class="headerlink" title="$2$-范数/$L_2$范数"></a>$2$-范数/$L_2$范数</h2><p>$$||x||_{2}=\sqrt{\sum^{N}_{i=1}x^{2}_{i}}$$</p>
-<p>Euclid范数（欧几里得范数，常用计算向量长度）</p>
-<p>matlab调用函数norm(x, 2)</p>
-<p>L2范数是指向量各元素的平方和然后求平方根</p>
+<p>$p_r(y=1 | x) = \frac{1}{\sqrt{1+e^{-w^Tx}}}$    </p>
 <ul>
-<li><p>$L2$范数可以防止过拟合，提升模型的泛化能力，有助于处理 $condition$ $number$不好下的矩阵(数据变化很小矩阵求解后结果变化很大)  </p>
+<li>Feed-forward networks </li>
+</ul>
+<p>$p_r(y=1 | x) = \frac{1}{\sqrt{1+e^{-h(x)}}}$    </p>
+<p>$h(x)=\sigma(Ax+b)$</p>
+<p>$h(x)$为隐藏层的工作：仿射变换（线性变换）+激活函数        </p>
+<ul>
+<li><p>Recurrent networks     </p>
 </li>
-<li><p>下降速度：最小化权值参数L1比L2变化的快 </p>
-</li>
-<li><p>模型空间的限制：L1会产生稀疏 L2不会。 </p>
-</li>
-<li><p>$L1$会趋向于产生少量的特征，而其他的特征都是0，而L2会选择更多的特征，这些特征都会接近于0。</p>
+<li><p>Conditional random field 条件随机场</p>
 </li>
 </ul>
-<p>$L1$    $w$分量尽量稀疏      如 $(0,a,0,0,b,0,0)$</p>
-<p>$L2$    $w$分量取值尽量均衡、稠密，即小而趋近于$0$     如$(0.3,0.5,-0.3,0.1,-0.2,0.3,-0.3)$</p>
-<p>$L_2$正则化：</p>
-<p>$$\sum^{m}_{j=1}|\theta_j|^{2}$$</p>
-<h2 id="p-范数"><a href="#p-范数" class="headerlink" title="$p$-范数"></a>$p$-范数</h2><p>$$||x||_{p}=(\sum^{N}_{i=1}|x_i|^{p})^{\frac{1}{p}}$$</p>
-<p>即向量元素绝对值的p次方和的1/p次幂</p>
-<p>matlab调用函数norm(x, p)</p>
-<p>L1范数是指向量中各个元素绝对值之和</p>
-<h2 id="infty-范数"><a href="#infty-范数" class="headerlink" title="$\infty$-范数"></a>$\infty$-范数</h2><p>$$ ||x||_{\infty}=\left.  max \right|_{i} |x_i| $$</p>
-<p>即所有向量元素绝对值中的最大值</p>
-<p>matlab调用函数norm(x, inf)</p>
-<h2 id="infty-范数-1"><a href="#infty-范数-1" class="headerlink" title="$-\infty$-范数"></a>$-\infty$-范数</h2><p>$$ ||x||_{-\infty}=\left.  min \right|_{i} |x|$$</p>
-<p>即所有向量元素绝对值中的最小值</p>
-<p>matlab调用函数norm(x, -inf)</p>
-<h1 id="矩阵范数"><a href="#矩阵范数" class="headerlink" title="矩阵范数"></a>矩阵范数</h1><p>$$A=<br> \left[<br> \begin{matrix}<br>   a_{11} &amp; a_{12} &amp; … \\<br>   a_{21} &amp; a_{ij} &amp; … \\<br>   … &amp; … &amp; a_{mn}<br>  \end{matrix}<br>  \right]<br>$$</p>
-<h2 id="1-范数-列和范数"><a href="#1-范数-列和范数" class="headerlink" title="$1$-范数  列和范数"></a>$1$-范数  列和范数</h2><p>即所有矩阵列向量绝对值之和的最大值</p>
-<p>$$||A||_1=\left.  max \right|_{j}\sum^{m}_{i=1}|a_{ij}|$$</p>
-<p>matlab调用函数norm(A, 1)</p>
-<h2 id="2-范数-谱范数"><a href="#2-范数-谱范数" class="headerlink" title="$2$-范数  谱范数"></a>$2$-范数  谱范数</h2><p>$A^TA$矩阵的最大特征值的开平方</p>
-<p>$$||A||_1=\left.  max \right|_{j}\sum^{m}_{i=1}|a_{ij}|$$</p>
-<p>matlab调用函数norm(A, 2)</p>
-<p>$$||A||_2=\sqrt{\lambda}$$</p>
-<p>$\lambda$是$A^TA$矩阵的最大特征值</p>
-<h2 id="infty-范数-行和范数"><a href="#infty-范数-行和范数" class="headerlink" title="$\infty$-范数 行和范数"></a>$\infty$-范数 行和范数</h2><p>即所有矩阵行向量绝对值之和的最大值</p>
-<p>$$ ||A||_{\infty}=\left.  max \right|_{i}\sum^{n}_{j=1}|a_{ij}| $$</p>
-<p>matlab调用函数norm(A, inf)</p>
-<h2 id="F-范数-Frobenius范数"><a href="#F-范数-Frobenius范数" class="headerlink" title="$F$-范数 Frobenius范数"></a>$F$-范数 Frobenius范数</h2><p>矩阵元素绝对值的平方和再开平方</p>
-<p>$$ ||A||_{F}=\sqrt{(\sum^{m}_{i=1}\sum^{n}_{j=1}|a_{ij}|)}$$</p>
-<p>matlab调用函数norm(A, ’fro‘)</p>
-<h2 id="核范数"><a href="#核范数" class="headerlink" title="核范数"></a>核范数</h2><p>$$||A||_*=\sum^{n}_{i=1}\lambda_i$$</p>
-<p>$\lambda_i$是$A$的奇异值</p>
+<p>对于一些简单的情况，我们会假设已知有模型可以很好的对分布进行建模，缺少的只是合适的参数。这时候很自然只要根据观测到的样本，学习参数让当前观测到的样本下的似然函数最大，这就是最大似然估计(Maximum Likelihood Estimation)</p>
+<p>最大似然估计MLE</p>
+<p>$$ \left. max \right| _{\theta} = \frac{1}{n}\sum^{n}_{i=1}log^{p_r(y=1 | x)}$$</p>
+<h3 id="2-非概率模型-Non-Probabilistic"><a href="#2-非概率模型-Non-Probabilistic" class="headerlink" title="(2) 非概率模型 Non-Probabilistic"></a>(2) 非概率模型 Non-Probabilistic</h3><p>Goal: given $x$, predict $y$</p>
+<p>求 $f (x; \theta)$</p>
+<p>几种基于非概率模型的判别式模型</p>
+<ul>
+<li><p>Support vector    machines </p>
+</li>
+<li><p>K-nearest neighbors </p>
+</li>
+<li><p>Decision tree</p>
+</li>
+</ul>
+<p>$$ \left. max \right| _{\theta} = \frac{1}{n}\sum^{n}_{i=1} \prod (f(x_i; \theta)=y_i)$$</p>
+<p>总结：判别式模型有基于概率模型也有基于非概率模型，基于概率模型就是要构造$p(y | x)$，基于非概率模型就是要构造$f (x; \theta)$</p>
+<h2 id="生成式模型-generative-models"><a href="#生成式模型-generative-models" class="headerlink" title="生成式模型(generative models)"></a>生成式模型(generative models)</h2><h3 id="1-概率模型-Probabilistic-1"><a href="#1-概率模型-Probabilistic-1" class="headerlink" title="(1) 概率模型 Probabilistic"></a>(1) 概率模型 Probabilistic</h3><p>求 $p_r(x,y)=p_r(y | x)p_r(x)$</p>
+<p>最大似然估计MLE</p>
+<p>$$ \left. max \right| _{\theta} = \frac{1}{n}\sum^{n}_{i=1}log^{p_r(x,y;\theta)}$$</p>
+<p>note:交叉熵cross-entropy是MLE的一个特例，针对概率模型</p>
+<ul>
+<li><p>Naive    Bayes </p>
+</li>
+<li><p>Bayesian networks</p>
+</li>
+<li><p>Hidden    Markov models 隐马尔科夫模型</p>
+</li>
+<li><p>Restricted Boltzmann machines 受限波兹尔曼机 </p>
+</li>
+</ul>
+<p>在RNN出来之前，用于语音识别，自然语言处理，将一个句子的各个成分属于什么词性</p>
+<ul>
+<li>Gaussian mixture models 混合高斯模型</li>
+</ul>
+<p>$$ p_r(x,y)=\sum^{n}_{i=1} p_r(x| y=i)p_r(y=i)$$</p>
+<p>$p_r(y=i)$ 多项式分布</p>
+<p>$p_r(x| y=i)$ 高斯分布 $N(x;(0,1))$</p>
+<ul>
+<li><p>Latent Dirichlet allocation </p>
+</li>
+<li><p>Variational auto encoder</p>
+</li>
+</ul>
+<p>总结：基于概率的生成式模型使用联合概率密度 $p_r(x,y)$基于概率的判别式模型使用条件概率密度$p(y | x)$</p>
+<h3 id="2-非概率模型-Non-Probabilistic-1"><a href="#2-非概率模型-Non-Probabilistic-1" class="headerlink" title="(2) 非概率模型 Non-Probabilistic"></a>(2) 非概率模型 Non-Probabilistic</h3><p>GAN</p>
+<h2 id="前期工作"><a href="#前期工作" class="headerlink" title="前期工作"></a>前期工作</h2><p>GAN 产生的大环境 2012-2014</p>
+<ul>
+<li><p>判别式深度模型：AlexNet、NIN、VGG、GoogleNet等</p>
+</li>
+<li><p>生成式深度模型：DBM、VAE、NCE（少、复杂）</p>
+</li>
+</ul>
+<p>DBM：</p>
+<p>常规模式：对目标对象的概率分布建模，并将其表达为具体的某种参数形式;再用最大似然的方法训练模型</p>
+<p>不足：似然分布无法直接求解，依赖近似和采样算法</p>
+<p>GSN（2014）</p>
+<p>无需具体参数化形式，用其他形式代替最大似然优化</p>
+<p>核心：假设一条马尔可夫链的稳态分布是数据的真实分布，并用梯度反传（BP）代替马尔可夫连的求解</p>
+<p>NCE：判别式准则辅助训练产生式模型</p>
+<p>VAE：两个网络互相训练，近似推断</p>
 
       
     </div>
@@ -434,8 +456,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/05/最大似然估计(MLE)和最大后验估计(MAP)/" rel="next" title="最大似然估计(MLE)和最大后验估计(MAP)">
-                <i class="fa fa-chevron-left"></i> 最大似然估计(MLE)和最大后验估计(MAP)
+              <a href="/2018/04/08/深度2/" rel="next" title="深度学习心得06| 调参">
+                <i class="fa fa-chevron-left"></i> 深度学习心得06| 调参
               </a>
             
           </div>
@@ -444,8 +466,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/07/Learning a Discriminative Prior for Blind Image Deblurring/" rel="prev" title="Learning a Discriminative Prior for Blind Image Deblurring">
-                Learning a Discriminative Prior for Blind Image Deblurring <i class="fa fa-chevron-right"></i>
+              <a href="/2018/08/09/GAN02-GAN的基本原理及推导/" rel="prev" title="GAN02| GAN的基本原理及推导">
+                GAN02| GAN的基本原理及推导 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -618,7 +640,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#范数与正则化"><span class="nav-number">1.</span> <span class="nav-text">范数与正则化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#向量范数"><span class="nav-number">2.</span> <span class="nav-text">向量范数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#L-0-范数"><span class="nav-number">2.1.</span> <span class="nav-text">$L_0$范数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-范数-L-1-范数"><span class="nav-number">2.2.</span> <span class="nav-text">$1$-范数/$L_1$范数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数稀疏的好处"><span class="nav-number">2.2.1.</span> <span class="nav-text">参数稀疏的好处</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-范数-L-2-范数"><span class="nav-number">2.3.</span> <span class="nav-text">$2$-范数/$L_2$范数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#p-范数"><span class="nav-number">2.4.</span> <span class="nav-text">$p$-范数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#infty-范数"><span class="nav-number">2.5.</span> <span class="nav-text">$\infty$-范数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#infty-范数-1"><span class="nav-number">2.6.</span> <span class="nav-text">$-\infty$-范数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#矩阵范数"><span class="nav-number">3.</span> <span class="nav-text">矩阵范数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-范数-列和范数"><span class="nav-number">3.1.</span> <span class="nav-text">$1$-范数  列和范数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-范数-谱范数"><span class="nav-number">3.2.</span> <span class="nav-text">$2$-范数  谱范数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#infty-范数-行和范数"><span class="nav-number">3.3.</span> <span class="nav-text">$\infty$-范数 行和范数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F-范数-Frobenius范数"><span class="nav-number">3.4.</span> <span class="nav-text">$F$-范数 Frobenius范数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核范数"><span class="nav-number">3.5.</span> <span class="nav-text">核范数</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#机器学习基本知识"><span class="nav-number">1.</span> <span class="nav-text">机器学习基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#判别式模型-Discriminative-models"><span class="nav-number">1.1.</span> <span class="nav-text">判别式模型(Discriminative models)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-概率模型-Probabilistic"><span class="nav-number">1.1.1.</span> <span class="nav-text">(1) 概率模型 Probabilistic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-非概率模型-Non-Probabilistic"><span class="nav-number">1.1.2.</span> <span class="nav-text">(2) 非概率模型 Non-Probabilistic</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成式模型-generative-models"><span class="nav-number">1.2.</span> <span class="nav-text">生成式模型(generative models)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-概率模型-Probabilistic-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">(1) 概率模型 Probabilistic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-非概率模型-Non-Probabilistic-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">(2) 非概率模型 Non-Probabilistic</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前期工作"><span class="nav-number">1.3.</span> <span class="nav-text">前期工作</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="你好, 欢迎来到曹越的快乐小站" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一、GAN基本认识                 1、基本流程1.输入噪声$z$ 2.连续函数$G$作为生成器,生成仿真的$\hat{x}$，不同的输入向量$z$，导致生成器生成不同的图片$\hat{x}$ 3.真实的样本$x$ 4.交给判别器$D$ 2、基本认识(1) 判别器$D$目标$D(x)=P_r(x\text{为真})$ $D(x)∈[0,1]$ 即判别器$D$认为x属于真实样本的概率">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GAN02| GAN的基本原理及推导">
+<meta property="og:url" content="http://yoursite.com/2018/08/09/GAN02-GAN的基本原理及推导/index.html">
+<meta property="og:site_name" content="曹越的快乐小站">
+<meta property="og:description" content="一、GAN基本认识                 1、基本流程1.输入噪声$z$ 2.连续函数$G$作为生成器,生成仿真的$\hat{x}$，不同的输入向量$z$，导致生成器生成不同的图片$\hat{x}$ 3.真实的样本$x$ 4.交给判别器$D$ 2、基本认识(1) 判别器$D$目标$D(x)=P_r(x\text{为真})$ $D(x)∈[0,1]$ 即判别器$D$认为x属于真实样本的概率">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ota4w56o8.bkt.clouddn.com/0121.png">
+<meta property="og:image" content="http://ota4w56o8.bkt.clouddn.com/0172.png">
+<meta property="og:updated_time" content="2018-08-09T06:29:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GAN02| GAN的基本原理及推导">
+<meta name="twitter:description" content="一、GAN基本认识                 1、基本流程1.输入噪声$z$ 2.连续函数$G$作为生成器,生成仿真的$\hat{x}$，不同的输入向量$z$，导致生成器生成不同的图片$\hat{x}$ 3.真实的样本$x$ 4.交给判别器$D$ 2、基本认识(1) 判别器$D$目标$D(x)=P_r(x\text{为真})$ $D(x)∈[0,1]$ 即判别器$D$认为x属于真实样本的概率">
+<meta name="twitter:image" content="http://ota4w56o8.bkt.clouddn.com/0121.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/09/GAN02-GAN的基本原理及推导/"/>
+
+
+
+
+
+  <title>GAN02| GAN的基本原理及推导 | 曹越的快乐小站</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曹越的快乐小站</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">关于理想我从来没选择放弃，即使在灰头土脸的日子里。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/09/GAN02-GAN的基本原理及推导/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曹越">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曹越的快乐小站">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">GAN02| GAN的基本原理及推导</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-09T10:47:44+08:00">
+                2018-08-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/生成式对抗网络/" itemprop="url" rel="index">
+                    <span itemprop="name">生成式对抗网络</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2018/08/09/GAN02-GAN的基本原理及推导/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/08/09/GAN02-GAN的基本原理及推导/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2018/08/09/GAN02-GAN的基本原理及推导/" class="leancloud_visitors" data-flag-title="GAN02| GAN的基本原理及推导">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一、GAN基本认识"><a href="#一、GAN基本认识" class="headerlink" title="一、GAN基本认识"></a>一、GAN基本认识</h1><p align="center"><br>    <img src="http://ota4w56o8.bkt.clouddn.com/0121.png" width="60%"><br>    <br>    <small>   </small><br></p>
+
+<h2 id="1、基本流程"><a href="#1、基本流程" class="headerlink" title="1、基本流程"></a>1、基本流程</h2><p>1.输入噪声$z$</p>
+<p>2.连续函数$G$作为生成器,生成仿真的$\hat{x}$，不同的输入向量$z$，导致生成器生成不同的图片$\hat{x}$</p>
+<p>3.真实的样本$x$</p>
+<p>4.交给判别器$D$</p>
+<h2 id="2、基本认识"><a href="#2、基本认识" class="headerlink" title="2、基本认识"></a>2、基本认识</h2><h3 id="1-判别器-D-目标"><a href="#1-判别器-D-目标" class="headerlink" title="(1) 判别器$D$目标"></a>(1) 判别器$D$目标</h3><p>$D(x)=P_r(x\text{为真})$ $D(x)∈[0,1]$ 即判别器$D$认为x属于真实样本的概率</p>
+<p>$D(\hat{x})=D(G(z)) ∈[0,1]$  即判别器$D$认为$\hat{x}$属于真实样本的概率</p>
+<p>$D$认为$x$属于真实样本的概率越大越好 $\Rightarrow \max \limits_{D} D(x)$</p>
+<p>$D$ 认为 $\hat{x}$ 属于真实样本的概率越小越好 $\Rightarrow  \min \limits_{D} D(G(z))\Rightarrow\max \limits_{D} [1-D(G(z))]$</p>
+<h3 id="2-生成器-G-目标"><a href="#2-生成器-G-目标" class="headerlink" title="(2) 生成器$G$目标"></a>(2) 生成器$G$目标</h3><p>$D$ 认为 $\hat{x}$ 属于真实样本的概率越大越好</p>
+<p>$\max \limits_{G} D(G(z))\Rightarrow\min \limits_{G} [1-D(G(z))]$</p>
+<h1 id="二、价值函数-目标函数"><a href="#二、价值函数-目标函数" class="headerlink" title="二、价值函数(目标函数)"></a>二、价值函数(目标函数)</h1><p>$$ \min \limits_{G} \max \limits_{D} V(G,D)=\min \limits_{G} \max \limits_{D} E_{x \sim P_{data}(x)}[log^{D(x)}]+E_{z \sim P_z(z)}[log^{(1-D(G(z)))}]$$</p>
+<h2 id="1、符号定义及含义"><a href="#1、符号定义及含义" class="headerlink" title="1、符号定义及含义"></a>1、符号定义及含义</h2><p>$data$→真实数据（$groundtruth$）</p>
+<p>$P_{data}$→真实数据的分布</p>
+<p>$z$→噪音（输入数据）</p>
+<p>$P_z$→原始噪音的分布</p>
+<p>$P_g$→经过生成器后的数据分布</p>
+<p>$G()$→生成映射函数</p>
+<p>$D()$→判别映射函数</p>
+<h3 id="1-生成器-G"><a href="#1-生成器-G" class="headerlink" title="(1) 生成器$G$"></a>(1) 生成器$G$</h3><p>生成器的结构为一个多层感知机，参数为 $\theta^{(G)}$</p>
+<p>生成映射函数</p>
+<p>$\hat{x}=G(z;\theta^{(G)})$ </p>
+<p>将噪音$z$映射到新的数据空间</p>
+<h3 id="2-判别器-D"><a href="#2-判别器-D" class="headerlink" title="(2) 判别器$D$"></a>(2) 判别器$D$</h3><p>判别器也是一个多层感知机，参数为$\theta^{(D)}$</p>
+<p>判别映射函数</p>
+<p>$D(x;\theta^{(D)})$ </p>
+<p>输出为一个标量，表示$x$来自真实数据$data$而不是生成数据的概率</p>
+<h3 id="3-示意图"><a href="#3-示意图" class="headerlink" title="(3) 示意图"></a>(3) 示意图</h3><p align="center"><br>    <img src="http://ota4w56o8.bkt.clouddn.com/0172.png" width="80%"><br>    <br>    <small>   </small><br></p>
+
+<p>图中，黑色曲线是真实样本的概率分布函数，绿色曲线是虚假样本的概率分布函数，蓝色曲线是判别器$D$的输出，它的值越大表示这个样本越有可能是真实样本。最下方的平行线是噪声$z$，它映射到了$x$。</p>
+<p>我们可以看到，一开始， 虽然 $G(z)$ 和 $x$ 是在同一个特征空间里的，但它们分布的差异很大，这时，虽然鉴别真实样本和虚假样本的模型 $D$ 性能也不强，但它很容易就能把两者区分开来，而随着训练的推进，虚假样本的分布逐渐与真实样本重合，$D$ 虽然也在不断更新，但也已经力不从心了。</p>
+<p>最后，黑线和绿线最后几乎重合，模型达到了最优状态，这时 $D$ 的输出对于任意样本都是 $0.5$</p>
+<h2 id="2、最优化问题表达"><a href="#2、最优化问题表达" class="headerlink" title="2、最优化问题表达"></a>2、最优化问题表达</h2><p>分为两项</p>
+<h3 id="第一项：判别器判别真实样本"><a href="#第一项：判别器判别真实样本" class="headerlink" title="第一项：判别器判别真实样本"></a>第一项：判别器判别真实样本</h3><p>$E_{x \sim P_{data}(x)}[log^{D(x)}]$</p>
+<p>$D(x)$ 定义一个判别器$D$，以判别样本是不是从$P_{data}$分布中取出来的</p>
+<p>其中$E$指代取期望,这一项是根据「正类」（即辨别出$x$属于真实数据$data$）的对数损失函数而构建的。最大化这一项相当于令判别器$D$在$x$服从于$data$的概率密度时能准确地预测$D(x)=1$</p>
+<p>$D(x)=1 \text{ }when\text{ }x \sim P_{data}(x)$</p>
+<h3 id="第二项：判别器判别虚假样本"><a href="#第二项：判别器判别虚假样本" class="headerlink" title="第二项：判别器判别虚假样本"></a>第二项：判别器判别虚假样本</h3><p>$E_{z \sim P_z(z)}[log^{(1-D(G(z)))}]$</p>
+<p>$D(x)=0 \text{ }when\text{ }x \sim P_{g}(G(z))$</p>
+<p>另一项是根据负类的对数损失函数构建的</p>
+<h3 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h3><p>为了让其写在统一式子里必须做一些改变。比如 $\max \limits_{D}$ 与 $\min \limits_{D}$ 不能同时出现</p>
+<p>$\min \limits_{D} D(G(z))$ 可以写为 $\max \limits_{D} -D(G(z))$</p>
+<p>无论输入为$x$ 还是 $\hat{x}$，都是$\max \limits_{D}$</p>
+<p>依然表示为概率，正值，且$∈[0,1]$</p>
+<p>$\max \limits_{D} 1-D(G(z))$</p>
+<p>整个训练是一个迭代过程。其实极小极大化博弈可以分开理解，即在给定$G$的情况下先最大化$V(D,G)$而取$D$，然后固定 $D$，并最小化 $V(D,G)$而得到$G$。其中，给定$G$，最大化$V(D,G)$评估了$P_g$和$P_{data}$之间的差异或距离。</p>
+<p>最优化问题表达为：</p>
+<p>$G^<em>=\arg \min\limits_{G} V(G,D^{</em>}_{G})$</p>
+<h1 id="三、理论推导"><a href="#三、理论推导" class="headerlink" title="三、理论推导"></a>三、理论推导</h1><h2 id="1、基础知识"><a href="#1、基础知识" class="headerlink" title="1、基础知识"></a>1、基础知识</h2><h3 id="1-KL散度"><a href="#1-KL散度" class="headerlink" title="(1) KL散度"></a>(1) KL散度</h3><p>KL散度（KL divergence），这是统计中的一个概念，是衡量两种概率分布的相似程度，其越小，表示两种概率分布越接近。 </p>
+<p>对于离散的概率分布，定义如下：</p>
+<p>$$D_{KL}(P||Q)=\sum_{i} P(i)\log \frac{P(i)}{Q(i)}$$</p>
+<p>对于连续的概率分布，定义如下:</p>
+<p>$$D_{KL}(P||Q)=\int^{\infty}_{-\infty} P(x)\log \frac{P(x)}{Q(x)}dx$$</p>
+<p>我们想要将一个随机高斯噪声$z$通过一个生成网络$G$得到一个和真的数据分布$P_{data}(x)$差不多的生成分布 $P_G(x;θ)$，其中的参数$θ$是网络的参数决定的，我们希望找到$θ$使得$P_g(x;θ)$和$P_{data}(x)$尽可能接近。</p>
+<h3 id="2-Maximun-Likelihood-Estimation"><a href="#2-Maximun-Likelihood-Estimation" class="headerlink" title="(2)Maximun Likelihood Estimation"></a>(2)Maximun Likelihood Estimation</h3><p>我们从真实数据分布$P_{data}(x)$里面取样$m$个点$x^1,x^2,⋯,x^m$根据给定的参数$θ$我们可以计算如下的概率 $P_G(x^i;θ)$，那么生成这 $m$ 个样本数据的似然(likelihood)就是：</p>
+<p>$$L=\prod_{i=1}^m P_G(x^i;θ)$$</p>
+<p>我们想要做的事情就是找到 $θ^∗$ 来最大化这个似然估计：</p>
+<p>最大化似然函数 $L$</p>
+<p>$$θ^∗=\arg \max\limits_{θ} \prod_{i=1}^m P_G(x^i;θ)$$</p>
+<p>对似然函数取对数,并且这一过程并不会改变最优化的结果</p>
+<p>$$\Leftrightarrow \arg \max\limits_{θ} \log\prod_{i=1}^m P_G(x^i;θ)$$</p>
+<p>累乘转化为累加</p>
+<p>$$= \arg \max\limits_{θ} \sum_{i=1}^m\log P_G(x^i;θ)$$</p>
+<p>将极大似然估计化为求 令$\log [P_G(x;θ)]$期望最大化的$θ$</p>
+<p>$$\approx \arg \max\limits_{θ} E_{x \sim P_{data}(x)}\log [P_G(x;θ)]$$</p>
+<p>展开期望</p>
+<p>$$= \arg \max\limits_{θ} \int_{x} P_{data}(x)\log P_G(x;θ)dx$$</p>
+<p>后加一项与$θ$无关的，并不影响最优化得结果</p>
+<p>$$\Leftrightarrow \arg \max\limits_{θ} \int_{x} P_{data}(x)\log P_G(x;θ)dx - \int_{x} P_{data}(x)\log P(x)dx$$</p>
+<p>合并这两个积分并构建类似 KL 散度的形式</p>
+<p>$$= \arg \max\limits_{θ} \int_{x} P_{data}(x)\log \frac{P_G(x;θ)}{P_{data}(x)}dx$$</p>
+<p>这里在前面添加一个负号，将 log 里面的分数倒一下</p>
+<p>$$= \arg \max\limits_{θ} -\int_{x} P_{data}(x)\log \frac{P_{data}(x)}{P_G(x;θ)}dx$$</p>
+<p>就变成了KL 散度</p>
+<p>$$= \arg \min \limits_{θ} KL(P_{data}(x)||P_G(x;θ))$$</p>
+<h3 id="3-P-g-x-θ-的计算"><a href="#3-P-g-x-θ-的计算" class="headerlink" title="(3) $P_g(x;θ)$ 的计算"></a>(3) $P_g(x;θ)$ 的计算</h3><p>$$P_g(x)=\int_{z} P_{prior}(z)I_{|G(z)=x|}dz$$</p>
+<p>$P_{prior}(z)$ 噪声$z$的先验</p>
+<p>里面的$I$表示示性函数，也就是：</p>
+<p>$$I_{|G(z)=x|}=\begin{cases}{}<br>0,G(z) \neq x\\<br>1,G(z)=x<br>\end{cases}$$</p>
+<p>这样我们其实根本没办法求出这个 $P_g(x)$ 出来，这就是生成模型的基本想法</p>
+<h2 id="2、-证明"><a href="#2、-证明" class="headerlink" title="2、 证明"></a>2、 证明</h2><p>生成器$G$</p>
+<p>$G$是一个生成器，给定先验分布$P_{prior}(z)$我们希望得到生成分布$P_G(x)$，这里很难通过极大似然估计得到结果</p>
+<p>判别器$D$ </p>
+<p>$D$是一个函数，来衡量$P_G(x)$与$P_{data}(x)$之间的差距，这是用来取代极大似然估计</p>
+<h3 id="1-最优判别器-D"><a href="#1-最优判别器-D" class="headerlink" title="(1) 最优判别器$D^*$"></a>(1) 最优判别器$D^*$</h3><p>在极小极大博弈的第一步中，给定生成器$G$，最大化$V(D,G)$而得出最优判别器$D$。其中，最大化$V(D,G)$评估了$P_G$ 和$P_{data}$之间的差异或距离。因为在原论文中价值函数可写为在$x$上的积分，即将数学期望展开为积分形式：</p>
+<p>固定G 优化D</p>
+<p>$$ V(D,G) = E_{x \sim P_{data}(x)}[log^{D(x)}]+E_{z \sim P_z(z)}[log^{(1-D(G(z)))}] $$</p>
+<p>期望展开</p>
+<p>$$ = \int_{x} P_{data}(x) [log^{D(x)}]dx +\int_{z} P_z(z)[log^{(1-D(G(z)))}] dz$$</p>
+<p>一个小推导</p>
+<p>$\hat{x}=G(z;\theta^{(G)})$ 即$\hat{x}=G(z)$</p>
+<p>$E[log^{(1-D(G(z)))}]=E[log^{(1-D(\hat{x}))}]$</p>
+<p>由连续性概率密度的期望定义得</p>
+<p>$\int_{z} P_z(z)[log^{(1-D(G(z)))}] dz=\int_{\hat{x}} P_g(\hat{x})[log^{(1-D(\hat{x}))}] d\hat{x}$</p>
+<p>代入得</p>
+<p>$$ = \int_{x} P_{data}(x) [log^{D(x)}]dx +\int_{\hat{x}} P_g(\hat{x})[log^{(1-D(\hat{x}))}] d\hat{x}$$</p>
+<p>变量替换 后一项$\hat{x}-&gt;x$</p>
+<p>$$ = \int_{x} [P_{data}(x) log^{D(x)} + P_g(x)log^{(1-D(x))}] dx$$</p>
+<p>注：在 GAN 原论文中，有一个思想和其它很多方法都不同，即生成器$G$不需要满足可逆条件。Scott Rome 认为这一点非常重要，因为实践中$G$就是不可逆的。而很多证明都忽略了这一点，他们在证明时错误地使用了积分换元公式，而积分换元却又恰好基于$G$的可逆条件。Scott 认为证明只能基于以下等式的成立性：</p>
+<p>$$E_{z \sim P_z(z)}[log^{(1-D(G(z)))}] = E_{x \sim P_G(x)}[log^{(1-D(x))}]$$</p>
+<p>该等式来源于测度论中的 Radon-Nikodym 定理。<br>有一些证明过程使用了积分换元公式，但进行积分换元就必须计算$G^{−1}$，而$G$的逆却并没有假定为存在。并且在神经网络的实践中，它也并不存在。</p>
+<p>令 $g(x)=P_{data}(x) log^{D(x)} + P_g(x)log^{(1-D(x))}$</p>
+<p>在数据给定，$G$给定的前提下， $P_{data}(x)$与$P_G(x)$都可以看作是常数</p>
+<p>令$a=P_{data}(x)$ $b=P_g(x)$ 代入 $g(x)$</p>
+<p>$$ f(D)=a\log (D) + b \log(1-D)$$</p>
+<p>令 $$ \frac{df(D)}{D}=0$$</p>
+<p>$$ \frac{df(D)}{D}=a×\frac{1}{D}+b×\frac{1}{1-D}×(-1)=0$$</p>
+<p>$$ \Leftrightarrow a×\frac{1}{D^<em>}=b×\frac{1}{1-D^</em>}$$</p>
+<p>$$ \Leftrightarrow a×(1-D^<em>)=b×(D^</em>)$$</p>
+<p>$$ \Leftrightarrow D^*=\frac{a}{a+b}$$</p>
+<p>$$ \Leftrightarrow D^*(x)=\frac{P_{data}(x)}{P_{data}(x)+P_g(x)}$$</p>
+<p>其实该最优的$D$在实践中并不是可计算的，但在数学上十分重要。我们并不知道先验的$P_{data}(x)$，所以我们在训练中永远不会用到它。另一方面，它的存在令我们可以证明最优的$G$是存在的，并且在训练中我们只需要逼近$D$。</p>
+<h3 id="2-最优生成器-G"><a href="#2-最优生成器-G" class="headerlink" title="(2) 最优生成器$G^*$"></a>(2) 最优生成器$G^*$</h3><p>$$C(G)=\max \limits_{D} V(G,D)$$</p>
+<p>$$=E_{x \sim P_{data}(x)}[log^{D^<em>_G(x)}]+E_{z \sim P_z(z)}[log^{(1-D^</em>_G(G(z)))}]$$</p>
+<p>$$=E_{x \sim P_{data}(x)}[log^{D^<em>_G(x)}]+E_{x \sim P_G(z)}[log^{(1-D^</em>_G(x))}]$$</p>
+<p>$D^*(x)=\frac{P_{data}(x)}{P_{data}(x)+P_g(x)}$代入</p>
+<p>$$=E_{x \sim P_{data}(x)}[log\frac{P_{data}(x)}{P_{data}(x)+P_g(x)}]+E_{x \sim P_G(z)}[log\frac{P_g(x)}{P_{data}(x)+P_g(x)}]$$</p>
+<p>log里面的分式上下同除2</p>
+<p>$$=E_{x \sim P_{data}(x)}[log\frac{\frac{1}{2}P_{data}(x)}{\frac{P_{data}(x)+P_g(x)}{2}}]+E_{x \sim P_g(x)}[log\frac{\frac{1}{2}P_g(x)}{\frac{P_{data}(x)+P_g(x)}{2}}]$$</p>
+<p>用期望定义展开</p>
+<p>$$=\int_{x} P_{data}(x)log\frac{\frac{1}{2}P_{data}(x)}{\frac{P_{data}(x)+P_g(x)}{2}}dx+\int_{x} P_{g}(x)log\frac{\frac{1}{2}P_g(x)}{\frac{P_{data}(x)+P_g(x)}{2}}dx$$</p>
+<p>$\frac{1}{2}$提出来</p>
+<p>$$=-\log2\int_{x} P_{data}(x)dx-\log2\int_{x} P_{g}(x)dx+\int_{x} P_{data}(x)log\frac{P_{data}(x)}{\frac{P_{data}(x)+P_g(x)}{2}}dx+\int_{x} P_{g}(x)log\frac{P_g(x)}{\frac{P_{data}(x)+P_g(x)}{2}}dx$$</p>
+<p>概率密度函数在定义域积分为1</p>
+<p>$$=-\log4+\int_{x} P_{data}(x)log\frac{P_{data}(x)}{\frac{P_{data}(x)+P_g(x)}{2}}dx+\int_{x} P_{g}(x)log\frac{P_g(x)}{\frac{P_{data}(x)+P_g(x)}{2}}dx$$</p>
+<p>$$=-\log(4) + KL(P_{data}(x) || \frac{P_{data}(x)+P_g(x)}{2})+ KL(P_{g}(x) || \frac{P_{data}(x)+P_g(x)}{2})$$</p>
+<p>$$=-\log(4) + 2JSD(P_{data}||P_g)$$</p>
+<p>$$\ge -\log(4)$$</p>
+<p>当且仅当$P_{data}=P_g$时 $C(G)$达到全局最优解，上面的不等式取等号,$C(G)$取得最小值</p>
+<h1 id="四、训练方法"><a href="#四、训练方法" class="headerlink" title="四、训练方法"></a>四、训练方法</h1><p>刚开始的时候生成器非常弱，$D(G(z))$ 基本接近于$0$ $1-D(G(z))$ 接近于$1$</p>
+<p>后一项导数为 $\frac{1}{1-D(G(z))}$也接近为$1$  梯度较小，不能传递梯度，不利于调参</p>
+<p>训练初期，将目标函数修改为</p>
+<p>$$ \max \limits_{G} \max \limits_{D} E_{x-P_{data}(x)}[log^{D(x)}]+E_{z-P_z(z)}[log^{(D(G(z)))}]$$</p>
+<p>后一项导数为 $\frac{1}{D(G(z))}$也接近为$∞$</p>
+<h1 id="五、参考"><a href="#五、参考" class="headerlink" title="五、参考"></a>五、参考</h1><p>[1]<a href="http://t.cn/ReHXnVV" target="_blank" rel="external">GAN专题论文研读</a></p>
+<p>[2]<a href="https://blog.csdn.net/littlehaes/article/details/81265872" target="_blank" rel="external">原始GAN论文笔记及TensorFlow实现</a></p>
+<p>[3]<a href="https://blog.csdn.net/stalbo/article/details/79283399" target="_blank" rel="external">原始GAN（基本概念及理论推导）</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/07/GAN01-判别式模型和生成式模型/" rel="next" title="GAN01| 判别式模型和生成式模型">
+                <i class="fa fa-chevron-left"></i> GAN01| 判别式模型和生成式模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="曹越" />
+            
+              <p class="site-author-name" itemprop="name">曹越</p>
+              <p class="site-description motion-element" itemprop="description">曹越的小天地</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/happycaoyue" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/imupkucaoyue" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-globe"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.weibo.com/imupkucaoyue" target="_blank" title="Weibo">
+                    
+                      <i class="fa fa-fw fa-globe"></i>Weibo</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://wycheng.me" title="南大校草王雨城个人技术博客" target="_blank">南大校草王雨城个人技术博客</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://plushunter.github.io" title="人大应用统计硕士技术博客" target="_blank">人大应用统计硕士技术博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、GAN基本认识"><span class="nav-number">1.</span> <span class="nav-text">一、GAN基本认识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、基本流程"><span class="nav-number">1.1.</span> <span class="nav-text">1、基本流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、基本认识"><span class="nav-number">1.2.</span> <span class="nav-text">2、基本认识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-判别器-D-目标"><span class="nav-number">1.2.1.</span> <span class="nav-text">(1) 判别器$D$目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-生成器-G-目标"><span class="nav-number">1.2.2.</span> <span class="nav-text">(2) 生成器$G$目标</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、价值函数-目标函数"><span class="nav-number">2.</span> <span class="nav-text">二、价值函数(目标函数)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、符号定义及含义"><span class="nav-number">2.1.</span> <span class="nav-text">1、符号定义及含义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-生成器-G"><span class="nav-number">2.1.1.</span> <span class="nav-text">(1) 生成器$G$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-判别器-D"><span class="nav-number">2.1.2.</span> <span class="nav-text">(2) 判别器$D$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-示意图"><span class="nav-number">2.1.3.</span> <span class="nav-text">(3) 示意图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、最优化问题表达"><span class="nav-number">2.2.</span> <span class="nav-text">2、最优化问题表达</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一项：判别器判别真实样本"><span class="nav-number">2.2.1.</span> <span class="nav-text">第一项：判别器判别真实样本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二项：判别器判别虚假样本"><span class="nav-number">2.2.2.</span> <span class="nav-text">第二项：判别器判别虚假样本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并"><span class="nav-number">2.2.3.</span> <span class="nav-text">合并</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、理论推导"><span class="nav-number">3.</span> <span class="nav-text">三、理论推导</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、基础知识"><span class="nav-number">3.1.</span> <span class="nav-text">1、基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-KL散度"><span class="nav-number">3.1.1.</span> <span class="nav-text">(1) KL散度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Maximun-Likelihood-Estimation"><span class="nav-number">3.1.2.</span> <span class="nav-text">(2)Maximun Likelihood Estimation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-P-g-x-θ-的计算"><span class="nav-number">3.1.3.</span> <span class="nav-text">(3) $P_g(x;θ)$ 的计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、-证明"><span class="nav-number">3.2.</span> <span class="nav-text">2、 证明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-最优判别器-D"><span class="nav-number">3.2.1.</span> <span class="nav-text">(1) 最优判别器$D^*$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-最优生成器-G"><span class="nav-number">3.2.2.</span> <span class="nav-text">(2) 最优生成器$G^*$</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、训练方法"><span class="nav-number">4.</span> <span class="nav-text">四、训练方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、参考"><span class="nav-number">5.</span> <span class="nav-text">五、参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曹越</span>
+<span id="busuanzi_container_site_pv">
+   <i class="fa fa-eye-"></i>本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+
+  <span id="busuanzi_container_site_uv">
+   <i class="fa fa-user-"></i>本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cyt2xVwFT';
+      var conf = 'a1bffb2be42605f5a43d6531f7dbf31c';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("EbaweVDHiHrQymnk5wIzfHP1-gzGzoHsz", "12DUrd2KdWPF2TdD64eMkAXl");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
