@@ -88,7 +88,11 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ota4w56o8.bkt.clouddn.com/0121.png">
 <meta property="og:image" content="http://ota4w56o8.bkt.clouddn.com/0172.png">
-<meta property="og:updated_time" content="2018-08-09T06:29:34.000Z">
+<meta property="og:image" content="http://ota4w56o8.bkt.clouddn.com/0173.png">
+<meta property="og:image" content="http://ota4w56o8.bkt.clouddn.com/0174.png">
+<meta property="og:image" content="http://ota4w56o8.bkt.clouddn.com/0175.png">
+<meta property="og:image" content="http://ota4w56o8.bkt.clouddn.com/0176.png">
+<meta property="og:updated_time" content="2018-08-10T01:28:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="GAN02| GAN的基本原理及推导">
 <meta name="twitter:description" content="一、GAN基本认识                 1、基本流程1.输入噪声$z$ 2.连续函数$G$作为生成器,生成仿真的$\hat{x}$，不同的输入向量$z$，导致生成器生成不同的图片$\hat{x}$ 3.真实的样本$x$ 4.交给判别器$D$ 2、基本认识(1) 判别器$D$目标$D(x)=P_r(x\text{为真})$ $D(x)∈[0,1]$ 即判别器$D$认为x属于真实样本的概率">
@@ -379,6 +383,7 @@
 <p>图中，黑色曲线是真实样本的概率分布函数，绿色曲线是虚假样本的概率分布函数，蓝色曲线是判别器$D$的输出，它的值越大表示这个样本越有可能是真实样本。最下方的平行线是噪声$z$，它映射到了$x$。</p>
 <p>我们可以看到，一开始， 虽然 $G(z)$ 和 $x$ 是在同一个特征空间里的，但它们分布的差异很大，这时，虽然鉴别真实样本和虚假样本的模型 $D$ 性能也不强，但它很容易就能把两者区分开来，而随着训练的推进，虚假样本的分布逐渐与真实样本重合，$D$ 虽然也在不断更新，但也已经力不从心了。</p>
 <p>最后，黑线和绿线最后几乎重合，模型达到了最优状态，这时 $D$ 的输出对于任意样本都是 $0.5$</p>
+<h3 id="4-目标函数等价式"><a href="#4-目标函数等价式" class="headerlink" title="(4) 目标函数等价式"></a>(4) 目标函数等价式</h3><p>$$ \min \limits_{G} \max \limits_{D} V(G,D)=\min \limits_{G} \max \limits_{D} E_{x \sim P_{data}(x)}[log^{D(x)}]+E_{x \sim P_g(x)}[log^{(1-D(x))}]$$</p>
 <h2 id="2、最优化问题表达"><a href="#2、最优化问题表达" class="headerlink" title="2、最优化问题表达"></a>2、最优化问题表达</h2><p>分为两项</p>
 <h3 id="第一项：判别器判别真实样本"><a href="#第一项：判别器判别真实样本" class="headerlink" title="第一项：判别器判别真实样本"></a>第一项：判别器判别真实样本</h3><p>$E_{x \sim P_{data}(x)}[log^{D(x)}]$</p>
 <p>$D(x)$ 定义一个判别器$D$，以判别样本是不是从$P_{data}$分布中取出来的</p>
@@ -394,14 +399,21 @@
 <p>$\max \limits_{D} 1-D(G(z))$</p>
 <p>整个训练是一个迭代过程。其实极小极大化博弈可以分开理解，即在给定$G$的情况下先最大化$V(D,G)$而取$D$，然后固定 $D$，并最小化 $V(D,G)$而得到$G$。其中，给定$G$，最大化$V(D,G)$评估了$P_g$和$P_{data}$之间的差异或距离。</p>
 <p>最优化问题表达为：</p>
-<p>$G^<em>=\arg \min\limits_{G} V(G,D^{</em>}_{G})$</p>
-<h1 id="三、理论推导"><a href="#三、理论推导" class="headerlink" title="三、理论推导"></a>三、理论推导</h1><h2 id="1、基础知识"><a href="#1、基础知识" class="headerlink" title="1、基础知识"></a>1、基础知识</h2><h3 id="1-KL散度"><a href="#1-KL散度" class="headerlink" title="(1) KL散度"></a>(1) KL散度</h3><p>KL散度（KL divergence），这是统计中的一个概念，是衡量两种概率分布的相似程度，其越小，表示两种概率分布越接近。 </p>
+<p>$G^∗=\arg \min\limits_{G} V(G,D^{∗}_{G})$</p>
+<h1 id="三、理论推导"><a href="#三、理论推导" class="headerlink" title="三、理论推导"></a>三、理论推导</h1><h2 id="1、基础知识"><a href="#1、基础知识" class="headerlink" title="1、基础知识"></a>1、基础知识</h2><h3 id="1-KL散度-KL-Divergence"><a href="#1-KL散度-KL-Divergence" class="headerlink" title="(1) KL散度 KL Divergence"></a>(1) KL散度 KL Divergence</h3><p>KL散度（KL divergence），这是统计中的一个概念，是衡量两种概率分布的相似程度，其越小，表示两种概率分布越接近。 </p>
 <p>对于离散的概率分布，定义如下：</p>
 <p>$$D_{KL}(P||Q)=\sum_{i} P(i)\log \frac{P(i)}{Q(i)}$$</p>
 <p>对于连续的概率分布，定义如下:</p>
 <p>$$D_{KL}(P||Q)=\int^{\infty}_{-\infty} P(x)\log \frac{P(x)}{Q(x)}dx$$</p>
 <p>我们想要将一个随机高斯噪声$z$通过一个生成网络$G$得到一个和真的数据分布$P_{data}(x)$差不多的生成分布 $P_G(x;θ)$，其中的参数$θ$是网络的参数决定的，我们希望找到$θ$使得$P_g(x;θ)$和$P_{data}(x)$尽可能接近。</p>
-<h3 id="2-Maximun-Likelihood-Estimation"><a href="#2-Maximun-Likelihood-Estimation" class="headerlink" title="(2)Maximun Likelihood Estimation"></a>(2)Maximun Likelihood Estimation</h3><p>我们从真实数据分布$P_{data}(x)$里面取样$m$个点$x^1,x^2,⋯,x^m$根据给定的参数$θ$我们可以计算如下的概率 $P_G(x^i;θ)$，那么生成这 $m$ 个样本数据的似然(likelihood)就是：</p>
+<h3 id="2-最大似然估计-Maximun-Likelihood-Estimation"><a href="#2-最大似然估计-Maximun-Likelihood-Estimation" class="headerlink" title="(2) 最大似然估计 Maximun Likelihood Estimation"></a>(2) 最大似然估计 Maximun Likelihood Estimation</h3><p align="center"><br>    <img src="http://ota4w56o8.bkt.clouddn.com/0173.png" width="60%"><br>    <br>    <small> 真实数据分布 </small><br></p>
+
+<p>我们把整个图像分布表示为一个二维空间，蓝色区域表示为显示人脸的真实图像分布，不在这个区域的点可能就不是人脸</p>
+<p>我们从真实数据分布$P_{data}(x)$里面取样$m$个点$x^1,x^2,⋯,x^m$根据给定的参数$θ$</p>
+<p>我们有个分布$P_G(x;θ)$，我们想要找到可以让$P_G(x;θ)$接近$P_{data}(x)$的参数$θ$</p>
+<p>(note：比如这个模型是高斯混合模型，那么这个参数就是高斯的均值和方差)</p>
+<p>最大似然估计方法</p>
+<p>我们可以计算如下的概率 $P_G(x^i;θ)$，那么生成这 $m$ 个样本数据的似然(likelihood)就是：</p>
 <p>$$L=\prod_{i=1}^m P_G(x^i;θ)$$</p>
 <p>我们想要做的事情就是找到 $θ^∗$ 来最大化这个似然估计：</p>
 <p>最大化似然函数 $L$</p>
@@ -422,11 +434,33 @@
 <p>$$= \arg \max\limits_{θ} -\int_{x} P_{data}(x)\log \frac{P_{data}(x)}{P_G(x;θ)}dx$$</p>
 <p>就变成了KL 散度</p>
 <p>$$= \arg \min \limits_{θ} KL(P_{data}(x)||P_G(x;θ))$$</p>
+<p>Maximum Likelihood Estimation = Minimize KL Divergence</p>
 <h3 id="3-P-g-x-θ-的计算"><a href="#3-P-g-x-θ-的计算" class="headerlink" title="(3) $P_g(x;θ)$ 的计算"></a>(3) $P_g(x;θ)$ 的计算</h3><p>$$P_g(x)=\int_{z} P_{prior}(z)I_{|G(z)=x|}dz$$</p>
 <p>$P_{prior}(z)$ 噪声$z$的先验</p>
 <p>里面的$I$表示示性函数，也就是：</p>
 <p>$$I_{|G(z)=x|}=\begin{cases}{}<br>0,G(z) \neq x\\<br>1,G(z)=x<br>\end{cases}$$</p>
-<p>这样我们其实根本没办法求出这个 $P_g(x)$ 出来，这就是生成模型的基本想法</p>
+<p>这样我们其实根本没办法求出$P_g(x)$ </p>
+<p>所以生成模型的基本想法就是生成模型使用一个网络，生成的数据分布和真实数据分布尽可能的接近</p>
+<p align="center"><br>    <img src="http://ota4w56o8.bkt.clouddn.com/0174.png" width="60%"><br>    <br>    <small>  </small><br></p>
+
+<p>$G* = \arg \min \limits_{G} Div(P_G,P_{data})$</p>
+<p>Divergence between distributions $P_G$  和 $P_{data}$</p>
+<p>两种分布尽可能接近。</p>
+<p>这样就会有两个问题</p>
+<ul>
+<li><p>两种分布 $P_G$  和 $P_{data}$，并不知道真正分布</p>
+</li>
+<li><p>也不知道怎么计算散度。</p>
+</li>
+</ul>
+<p>GAN的解决方案</p>
+<p>1&gt; 我们不知道$P_G$  和 $P_{data}$的分布，但是我们可以从中采样</p>
+<p align="center"><br>    <img src="http://ota4w56o8.bkt.clouddn.com/0175.png" width="80%"><br>    <br>    <small>   </small><br></p>
+
+<p>2&gt; 计算散度</p>
+<p align="center"><br>    <img src="http://ota4w56o8.bkt.clouddn.com/0176.png" width="60%"><br>    <br>    <small>   </small><br></p>
+
+<p>用判别器计算的结果表示散度</p>
 <h2 id="2、-证明"><a href="#2、-证明" class="headerlink" title="2、 证明"></a>2、 证明</h2><p>生成器$G$</p>
 <p>$G$是一个生成器，给定先验分布$P_{prior}(z)$我们希望得到生成分布$P_G(x)$，这里很难通过极大似然估计得到结果</p>
 <p>判别器$D$ </p>
@@ -446,22 +480,25 @@
 <p>变量替换 后一项$\hat{x}-&gt;x$</p>
 <p>$$ = \int_{x} [P_{data}(x) log^{D(x)} + P_g(x)log^{(1-D(x))}] dx$$</p>
 <p>注：在 GAN 原论文中，有一个思想和其它很多方法都不同，即生成器$G$不需要满足可逆条件。Scott Rome 认为这一点非常重要，因为实践中$G$就是不可逆的。而很多证明都忽略了这一点，他们在证明时错误地使用了积分换元公式，而积分换元却又恰好基于$G$的可逆条件。Scott 认为证明只能基于以下等式的成立性：</p>
-<p>$$E_{z \sim P_z(z)}[log^{(1-D(G(z)))}] = E_{x \sim P_G(x)}[log^{(1-D(x))}]$$</p>
+<p>$$E_{z \sim P_z(z)}[log^{(1-D(G(z)))}] = E_{x \sim P_g(x)}[log^{(1-D(x))}]$$</p>
 <p>该等式来源于测度论中的 Radon-Nikodym 定理。<br>有一些证明过程使用了积分换元公式，但进行积分换元就必须计算$G^{−1}$，而$G$的逆却并没有假定为存在。并且在神经网络的实践中，它也并不存在。</p>
 <p>令 $g(x)=P_{data}(x) log^{D(x)} + P_g(x)log^{(1-D(x))}$</p>
+<p>假定$D(x)$是任何函数，那么最大化目标函数，等价于最小化$g(x)$</p>
 <p>在数据给定，$G$给定的前提下， $P_{data}(x)$与$P_G(x)$都可以看作是常数</p>
 <p>令$a=P_{data}(x)$ $b=P_g(x)$ 代入 $g(x)$</p>
 <p>$$ f(D)=a\log (D) + b \log(1-D)$$</p>
+<p>找到微分是$0$的地方</p>
 <p>令 $$ \frac{df(D)}{D}=0$$</p>
 <p>$$ \frac{df(D)}{D}=a×\frac{1}{D}+b×\frac{1}{1-D}×(-1)=0$$</p>
 <p>$$ \Leftrightarrow a×\frac{1}{D^<em>}=b×\frac{1}{1-D^</em>}$$</p>
 <p>$$ \Leftrightarrow a×(1-D^<em>)=b×(D^</em>)$$</p>
 <p>$$ \Leftrightarrow D^*=\frac{a}{a+b}$$</p>
 <p>$$ \Leftrightarrow D^*(x)=\frac{P_{data}(x)}{P_{data}(x)+P_g(x)}$$</p>
+<p>通过验证，这个微分为$0$的点是最小值点</p>
 <p>其实该最优的$D$在实践中并不是可计算的，但在数学上十分重要。我们并不知道先验的$P_{data}(x)$，所以我们在训练中永远不会用到它。另一方面，它的存在令我们可以证明最优的$G$是存在的，并且在训练中我们只需要逼近$D$。</p>
 <h3 id="2-最优生成器-G"><a href="#2-最优生成器-G" class="headerlink" title="(2) 最优生成器$G^*$"></a>(2) 最优生成器$G^*$</h3><p>$$C(G)=\max \limits_{D} V(G,D)$$</p>
-<p>$$=E_{x \sim P_{data}(x)}[log^{D^<em>_G(x)}]+E_{z \sim P_z(z)}[log^{(1-D^</em>_G(G(z)))}]$$</p>
-<p>$$=E_{x \sim P_{data}(x)}[log^{D^<em>_G(x)}]+E_{x \sim P_G(z)}[log^{(1-D^</em>_G(x))}]$$</p>
+<p>$$=E_{x \sim P_{data}(x)}[log^{D^∗_G(x)}]+E_{z \sim P_z(z)}[log^{(1-D^∗_G(G(z)))}]$$</p>
+<p>$$=E_{x \sim P_{data}(x)}[log^{D^∗_G(x)}]+E_{x \sim P_G(z)}[log^{(1-D^∗_G(x))}]$$</p>
 <p>$D^*(x)=\frac{P_{data}(x)}{P_{data}(x)+P_g(x)}$代入</p>
 <p>$$=E_{x \sim P_{data}(x)}[log\frac{P_{data}(x)}{P_{data}(x)+P_g(x)}]+E_{x \sim P_G(z)}[log\frac{P_g(x)}{P_{data}(x)+P_g(x)}]$$</p>
 <p>log里面的分式上下同除2</p>
@@ -476,6 +513,12 @@
 <p>$$=-\log(4) + 2JSD(P_{data}||P_g)$$</p>
 <p>$$\ge -\log(4)$$</p>
 <p>当且仅当$P_{data}=P_g$时 $C(G)$达到全局最优解，上面的不等式取等号,$C(G)$取得最小值</p>
+<p>最小目标函数的结果是JS散度 </p>
+<p>Jensen-Shannon divergence</p>
+<p>$$JSD(P||Q)=\frac{1}{2}KL(P||M)+\frac{1}{2}KL(Q||M)$$</p>
+<p>$$M=\frac{1}{2}(P+Q)$$</p>
+<p>$D^* = \arg \max \limits_{D} V(G,D)$</p>
+<p>$G^<em> = \arg \min \limits_{G} Div(P_G,P_{data}) \Leftrightarrow G^</em> = \arg \min \limits_{G} \max \limits_{D} V(G,D)$</p>
 <h1 id="四、训练方法"><a href="#四、训练方法" class="headerlink" title="四、训练方法"></a>四、训练方法</h1><p>刚开始的时候生成器非常弱，$D(G(z))$ 基本接近于$0$ $1-D(G(z))$ 接近于$1$</p>
 <p>后一项导数为 $\frac{1}{1-D(G(z))}$也接近为$1$  梯度较小，不能传递梯度，不利于调参</p>
 <p>训练初期，将目标函数修改为</p>
@@ -484,6 +527,7 @@
 <h1 id="五、参考"><a href="#五、参考" class="headerlink" title="五、参考"></a>五、参考</h1><p>[1]<a href="http://t.cn/ReHXnVV" target="_blank" rel="external">GAN专题论文研读</a></p>
 <p>[2]<a href="https://blog.csdn.net/littlehaes/article/details/81265872" target="_blank" rel="external">原始GAN论文笔记及TensorFlow实现</a></p>
 <p>[3]<a href="https://blog.csdn.net/stalbo/article/details/79283399" target="_blank" rel="external">原始GAN（基本概念及理论推导）</a></p>
+<p>[2]<a href="http://speech.ee.ntu.edu.tw/~tlkagk/courses_MLDS18.html" target="_blank" rel="external">2018年台大李宏毅教授MLDS课程-GAN Theory</a></p>
 
       
     </div>
@@ -688,7 +732,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、GAN基本认识"><span class="nav-number">1.</span> <span class="nav-text">一、GAN基本认识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、基本流程"><span class="nav-number">1.1.</span> <span class="nav-text">1、基本流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、基本认识"><span class="nav-number">1.2.</span> <span class="nav-text">2、基本认识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-判别器-D-目标"><span class="nav-number">1.2.1.</span> <span class="nav-text">(1) 判别器$D$目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-生成器-G-目标"><span class="nav-number">1.2.2.</span> <span class="nav-text">(2) 生成器$G$目标</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、价值函数-目标函数"><span class="nav-number">2.</span> <span class="nav-text">二、价值函数(目标函数)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、符号定义及含义"><span class="nav-number">2.1.</span> <span class="nav-text">1、符号定义及含义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-生成器-G"><span class="nav-number">2.1.1.</span> <span class="nav-text">(1) 生成器$G$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-判别器-D"><span class="nav-number">2.1.2.</span> <span class="nav-text">(2) 判别器$D$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-示意图"><span class="nav-number">2.1.3.</span> <span class="nav-text">(3) 示意图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、最优化问题表达"><span class="nav-number">2.2.</span> <span class="nav-text">2、最优化问题表达</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一项：判别器判别真实样本"><span class="nav-number">2.2.1.</span> <span class="nav-text">第一项：判别器判别真实样本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二项：判别器判别虚假样本"><span class="nav-number">2.2.2.</span> <span class="nav-text">第二项：判别器判别虚假样本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并"><span class="nav-number">2.2.3.</span> <span class="nav-text">合并</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、理论推导"><span class="nav-number">3.</span> <span class="nav-text">三、理论推导</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、基础知识"><span class="nav-number">3.1.</span> <span class="nav-text">1、基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-KL散度"><span class="nav-number">3.1.1.</span> <span class="nav-text">(1) KL散度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Maximun-Likelihood-Estimation"><span class="nav-number">3.1.2.</span> <span class="nav-text">(2)Maximun Likelihood Estimation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-P-g-x-θ-的计算"><span class="nav-number">3.1.3.</span> <span class="nav-text">(3) $P_g(x;θ)$ 的计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、-证明"><span class="nav-number">3.2.</span> <span class="nav-text">2、 证明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-最优判别器-D"><span class="nav-number">3.2.1.</span> <span class="nav-text">(1) 最优判别器$D^*$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-最优生成器-G"><span class="nav-number">3.2.2.</span> <span class="nav-text">(2) 最优生成器$G^*$</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、训练方法"><span class="nav-number">4.</span> <span class="nav-text">四、训练方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、参考"><span class="nav-number">5.</span> <span class="nav-text">五、参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、GAN基本认识"><span class="nav-number">1.</span> <span class="nav-text">一、GAN基本认识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、基本流程"><span class="nav-number">1.1.</span> <span class="nav-text">1、基本流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、基本认识"><span class="nav-number">1.2.</span> <span class="nav-text">2、基本认识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-判别器-D-目标"><span class="nav-number">1.2.1.</span> <span class="nav-text">(1) 判别器$D$目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-生成器-G-目标"><span class="nav-number">1.2.2.</span> <span class="nav-text">(2) 生成器$G$目标</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、价值函数-目标函数"><span class="nav-number">2.</span> <span class="nav-text">二、价值函数(目标函数)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、符号定义及含义"><span class="nav-number">2.1.</span> <span class="nav-text">1、符号定义及含义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-生成器-G"><span class="nav-number">2.1.1.</span> <span class="nav-text">(1) 生成器$G$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-判别器-D"><span class="nav-number">2.1.2.</span> <span class="nav-text">(2) 判别器$D$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-示意图"><span class="nav-number">2.1.3.</span> <span class="nav-text">(3) 示意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-目标函数等价式"><span class="nav-number">2.1.4.</span> <span class="nav-text">(4) 目标函数等价式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、最优化问题表达"><span class="nav-number">2.2.</span> <span class="nav-text">2、最优化问题表达</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一项：判别器判别真实样本"><span class="nav-number">2.2.1.</span> <span class="nav-text">第一项：判别器判别真实样本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二项：判别器判别虚假样本"><span class="nav-number">2.2.2.</span> <span class="nav-text">第二项：判别器判别虚假样本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并"><span class="nav-number">2.2.3.</span> <span class="nav-text">合并</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、理论推导"><span class="nav-number">3.</span> <span class="nav-text">三、理论推导</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、基础知识"><span class="nav-number">3.1.</span> <span class="nav-text">1、基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-KL散度-KL-Divergence"><span class="nav-number">3.1.1.</span> <span class="nav-text">(1) KL散度 KL Divergence</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-最大似然估计-Maximun-Likelihood-Estimation"><span class="nav-number">3.1.2.</span> <span class="nav-text">(2) 最大似然估计 Maximun Likelihood Estimation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-P-g-x-θ-的计算"><span class="nav-number">3.1.3.</span> <span class="nav-text">(3) $P_g(x;θ)$ 的计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、-证明"><span class="nav-number">3.2.</span> <span class="nav-text">2、 证明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-最优判别器-D"><span class="nav-number">3.2.1.</span> <span class="nav-text">(1) 最优判别器$D^*$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-最优生成器-G"><span class="nav-number">3.2.2.</span> <span class="nav-text">(2) 最优生成器$G^*$</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、训练方法"><span class="nav-number">4.</span> <span class="nav-text">四、训练方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、参考"><span class="nav-number">5.</span> <span class="nav-text">五、参考</span></a></li></ol></div>
             
 
           </div>
