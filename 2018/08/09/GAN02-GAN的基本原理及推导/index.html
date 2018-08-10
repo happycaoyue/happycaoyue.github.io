@@ -92,7 +92,7 @@
 <meta property="og:image" content="http://ota4w56o8.bkt.clouddn.com/0174.png">
 <meta property="og:image" content="http://ota4w56o8.bkt.clouddn.com/0175.png">
 <meta property="og:image" content="http://ota4w56o8.bkt.clouddn.com/0176.png">
-<meta property="og:updated_time" content="2018-08-10T01:42:10.469Z">
+<meta property="og:updated_time" content="2018-08-10T01:44:00.552Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="GAN02| GAN的基本原理及推导">
 <meta name="twitter:description" content="一、GAN基本认识                 1、基本流程1.输入噪声$z$ 2.连续函数$G$作为生成器,生成仿真的$\hat{x}$，不同的输入向量$z$，导致生成器生成不同的图片$\hat{x}$ 3.真实的样本$x$ 4.交给判别器$D$ 2、基本认识(1) 判别器$D$目标$D(x)=P_r(x\text{为真})$ $D(x)∈[0,1]$ 即判别器$D$认为x属于真实样本的概率">
@@ -518,7 +518,7 @@
 <p>$$JSD(P||Q)=\frac{1}{2}KL(P||M)+\frac{1}{2}KL(Q||M)$$</p>
 <p>$$M=\frac{1}{2}(P+Q)$$</p>
 <p>$D^* = \arg \max \limits_{D} V(G,D)$</p>
-<p>$G^<em> = \arg \min \limits_{G} Div(P_G,P_{data}) \Leftrightarrow G^</em> = \arg \min \limits_{G} \max \limits_{D} V(G,D)$</p>
+<p>$G^∗ = \arg \min \limits_{G} Div(P_G,P_{data}) \Leftrightarrow G^∗ = \arg \min \limits_{G} \max \limits_{D} V(G,D)$</p>
 <h1 id="四、训练方法"><a href="#四、训练方法" class="headerlink" title="四、训练方法"></a>四、训练方法</h1><p>刚开始的时候生成器非常弱，$D(G(z))$ 基本接近于$0$ $1-D(G(z))$ 接近于$1$</p>
 <p>后一项导数为 $\frac{1}{1-D(G(z))}$也接近为$1$  梯度较小，不能传递梯度，不利于调参</p>
 <p>训练初期，将目标函数修改为</p>
